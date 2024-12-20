@@ -1,0 +1,38 @@
+
+{
+    "buildInfo": "{build.MOS_LINK=https://support.oracle.com/epmos/faces/DocumentDisplay?id=2485457.1, build.MOS_NOTE=2485457.1, build.date=2024/10/21 11:16:05 -0400, build.hash=babf5a631, build.hash_date=2024/10/18 18:36:27 -0400, build.label=(HEAD, tag: v24.7, origin/stable_devel, stable_devel), build.max_target_version=19, build.supported_target_versions=19, build.type=production, build.version=24.7.241021}",
+    "commandLine": "-config 19c.cfg -mode download",
+    "configFile": "global.global_log_dir=/Users/ribas/iCloud/Oracle/00_DBNitro/dbnitro/tools/AutoUpgrade/log\nglobal.autoupg_log_dir=/Users/ribas/iCloud/Oracle/00_DBNitro/dbnitro/tools/AutoUpgrade/log\nglobal.keystore=/Users/ribas/iCloud/Oracle/00_DBNitro/dbnitro/tools/AutoUpgrade/KeyStore\nupg1.log_dir=/Users/ribas/iCloud/Oracle/00_DBNitro/dbnitro/tools/AutoUpgrade/log\nupg1.folder=/Users/ribas/iCloud/Oracle/00_DBNitro/dbnitro/tools/AutoUpgrade/\nupg1.source_home=/Users/ribas/iCloud/Oracle/00_DBNitro/dbnitro/tools/AutoUpgrade/\nupg1.target_version=19\nupg1.patch=RECOMMENDED",
+    "startTime": "2024-11-01T10:41:39.556641",
+    "configProcessStatus": false,
+    "configExceptions": "oracle.commonx.utils.errors.ConfigurationError: \nThere were conditions found preventing AutoUpgrade Patching from successfully running\n\n*Downloading Oracle Patch files\nPatch query failed\n*Connection Failed - You entered an incorrect user name or password.*\n",
+    "globalErrorLogs": [
+        {
+            "loggerName": "/Users/ribas/iCloud/Oracle/00_DBNitro/dbnitro/tools/AutoUpgrade/log/cfgtoollogs/patch/auto/aru/aru.log",
+            "message": "Java http client failed with the following output [400] :\n{\"error\":\"invalid_grant\",\"error_description\":\"You entered an incorrect user name or password.\",\"ecid\":\"zd7c616Qg10000000\"} - JavaHttpClient.request_#174",
+            "level": "WARNING"
+        },
+        {
+            "loggerName": "/Users/ribas/iCloud/Oracle/00_DBNitro/dbnitro/tools/AutoUpgrade/log/cfgtoollogs/patch/auto/aru/aru.log",
+            "message": "MOS connection failed",
+            "level": "WARNING"
+        },
+        {
+            "loggerName": "/Users/ribas/iCloud/Oracle/00_DBNitro/dbnitro/tools/AutoUpgrade/log/cfgtoollogs/patch/auto/aru/aru.log",
+            "message": "Patch query failed\n*Connection Failed - You entered an incorrect user name or password.* - DownloadFiles.isValidSetup#114",
+            "level": "WARNING"
+        },
+        {
+            "loggerName": "/Users/ribas/iCloud/Oracle/00_DBNitro/dbnitro/tools/AutoUpgrade/log/cfgtoollogs/patch/auto/autoupgrade_patching.log",
+            "message": "*Downloading Oracle Patch files\nPatch query failed\n*Connection Failed - You entered an incorrect user name or password.*\n",
+            "level": "ERROR"
+        },
+        {
+            "loggerName": "/Users/ribas/iCloud/Oracle/00_DBNitro/dbnitro/tools/AutoUpgrade/log/cfgtoollogs/patch/auto/autoupgrade_patching.log",
+            "message": "\nThere were conditions found preventing AutoUpgrade Patching from successfully running\n\n*Downloading Oracle Patch files\nPatch query failed\n*Connection Failed - You entered an incorrect user name or password.*\n - Bootstrap.processCLIParams#83",
+            "level": "WARNING"
+        }
+    ],
+    "jobs": [
+    ]
+}

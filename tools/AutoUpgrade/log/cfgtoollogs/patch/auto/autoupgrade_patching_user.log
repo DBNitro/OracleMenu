@@ -1,0 +1,223 @@
+2024-11-01 10:11:05.036 INFO 
+build.MOS_LINK:https://support.oracle.com/epmos/faces/DocumentDisplay?id=2485457.1
+build.MOS_NOTE:2485457.1
+build.date:2024/10/21 11:16:05 -0400
+build.hash:babf5a631
+build.hash_date:2024/10/18 18:36:27 -0400
+build.label:(HEAD, tag: v24.7, origin/stable_devel, stable_devel)
+build.max_target_version:19
+build.supported_target_versions:19
+build.type:production
+build.version:24.7.241021
+ 
+2024-11-01 10:22:44.345 INFO 
+build.MOS_LINK:https://support.oracle.com/epmos/faces/DocumentDisplay?id=2485457.1
+build.MOS_NOTE:2485457.1
+build.date:2024/10/21 11:16:05 -0400
+build.hash:babf5a631
+build.hash_date:2024/10/18 18:36:27 -0400
+build.label:(HEAD, tag: v24.7, origin/stable_devel, stable_devel)
+build.max_target_version:19
+build.supported_target_versions:19
+build.type:production
+build.version:24.7.241021
+ 
+2024-11-01 10:23:09.001 INFO 
+build.MOS_LINK:https://support.oracle.com/epmos/faces/DocumentDisplay?id=2485457.1
+build.MOS_NOTE:2485457.1
+build.date:2024/10/21 11:16:05 -0400
+build.hash:babf5a631
+build.hash_date:2024/10/18 18:36:27 -0400
+build.label:(HEAD, tag: v24.7, origin/stable_devel, stable_devel)
+build.max_target_version:19
+build.supported_target_versions:19
+build.type:production
+build.version:24.7.241021
+ 
+2024-11-01 10:30:01.609 INFO 
+build.MOS_LINK:https://support.oracle.com/epmos/faces/DocumentDisplay?id=2485457.1
+build.MOS_NOTE:2485457.1
+build.date:2024/10/21 11:16:05 -0400
+build.hash:babf5a631
+build.hash_date:2024/10/18 18:36:27 -0400
+build.label:(HEAD, tag: v24.7, origin/stable_devel, stable_devel)
+build.max_target_version:19
+build.supported_target_versions:19
+build.type:production
+build.version:24.7.241021
+ 
+2024-11-01 10:30:32.622 INFO 
+build.MOS_LINK:https://support.oracle.com/epmos/faces/DocumentDisplay?id=2485457.1
+build.MOS_NOTE:2485457.1
+build.date:2024/10/21 11:16:05 -0400
+build.hash:babf5a631
+build.hash_date:2024/10/18 18:36:27 -0400
+build.label:(HEAD, tag: v24.7, origin/stable_devel, stable_devel)
+build.max_target_version:19
+build.supported_target_versions:19
+build.type:production
+build.version:24.7.241021
+ 
+2024-11-01 10:32:45.664 INFO 
+build.MOS_LINK:https://support.oracle.com/epmos/faces/DocumentDisplay?id=2485457.1
+build.MOS_NOTE:2485457.1
+build.date:2024/10/21 11:16:05 -0400
+build.hash:babf5a631
+build.hash_date:2024/10/18 18:36:27 -0400
+build.label:(HEAD, tag: v24.7, origin/stable_devel, stable_devel)
+build.max_target_version:19
+build.supported_target_versions:19
+build.type:production
+build.version:24.7.241021
+ 
+2024-11-01 10:35:00.336 INFO 
+build.MOS_LINK:https://support.oracle.com/epmos/faces/DocumentDisplay?id=2485457.1
+build.MOS_NOTE:2485457.1
+build.date:2024/10/21 11:16:05 -0400
+build.hash:babf5a631
+build.hash_date:2024/10/18 18:36:27 -0400
+build.label:(HEAD, tag: v24.7, origin/stable_devel, stable_devel)
+build.max_target_version:19
+build.supported_target_versions:19
+build.type:production
+build.version:24.7.241021
+ 
+2024-11-01 10:39:23.267 INFO 
+build.MOS_LINK:https://support.oracle.com/epmos/faces/DocumentDisplay?id=2485457.1
+build.MOS_NOTE:2485457.1
+build.date:2024/10/21 11:16:05 -0400
+build.hash:babf5a631
+build.hash_date:2024/10/18 18:36:27 -0400
+build.label:(HEAD, tag: v24.7, origin/stable_devel, stable_devel)
+build.max_target_version:19
+build.supported_target_versions:19
+build.type:production
+build.version:24.7.241021
+ 
+2024-11-01 10:39:25.576 INFO Oracle version utility failed to determine target version for ORACLE_HOME /Users/ribas/iCloud/Oracle/00_DBNitro/dbnitro/tools/AutoUpgrade 
+2024-11-01 10:39:25.576 INFO Oracle Base utility failed to determine ORACLE_BASE for ORACLE_HOME /Users/ribas/iCloud/Oracle/00_DBNitro/dbnitro/tools/AutoUpgrade 
+2024-11-01 10:39:25.577 INFO Oracle Base Configuration utility failed to determine ORACLE_BASE for ORACLE_HOME /Users/ribas/iCloud/Oracle/00_DBNitro/dbnitro/tools/AutoUpgrade 
+2024-11-01 10:39:25.577 INFO Oracle Base Home utility failed to determine ORACLE_BASE for ORACLE_HOME /Users/ribas/iCloud/Oracle/00_DBNitro/dbnitro/tools/AutoUpgrade 
+2024-11-01 10:39:27.773 INFO Finished processing dbEntry upg1 
+2024-11-01 10:41:39.572 INFO 
+build.MOS_LINK:https://support.oracle.com/epmos/faces/DocumentDisplay?id=2485457.1
+build.MOS_NOTE:2485457.1
+build.date:2024/10/21 11:16:05 -0400
+build.hash:babf5a631
+build.hash_date:2024/10/18 18:36:27 -0400
+build.label:(HEAD, tag: v24.7, origin/stable_devel, stable_devel)
+build.max_target_version:19
+build.supported_target_versions:19
+build.type:production
+build.version:24.7.241021
+ 
+2024-11-01 10:41:41.189 INFO Oracle version utility failed to determine target version for ORACLE_HOME /Users/ribas/iCloud/Oracle/00_DBNitro/dbnitro/tools/AutoUpgrade 
+2024-11-01 10:41:41.190 INFO Oracle Base utility failed to determine ORACLE_BASE for ORACLE_HOME /Users/ribas/iCloud/Oracle/00_DBNitro/dbnitro/tools/AutoUpgrade 
+2024-11-01 10:41:41.190 INFO Oracle Base Configuration utility failed to determine ORACLE_BASE for ORACLE_HOME /Users/ribas/iCloud/Oracle/00_DBNitro/dbnitro/tools/AutoUpgrade 
+2024-11-01 10:41:41.190 INFO Oracle Base Home utility failed to determine ORACLE_BASE for ORACLE_HOME /Users/ribas/iCloud/Oracle/00_DBNitro/dbnitro/tools/AutoUpgrade 
+2024-11-01 10:41:41.295 INFO Finished processing dbEntry upg1 
+2024-11-01 10:41:42.112 ERROR *Downloading Oracle Patch files
+Patch query failed
+*Connection Failed - You entered an incorrect user name or password.*
+ 
+2024-11-01 10:44:46.979 INFO 
+build.MOS_LINK:https://support.oracle.com/epmos/faces/DocumentDisplay?id=2485457.1
+build.MOS_NOTE:2485457.1
+build.date:2024/10/21 11:16:05 -0400
+build.hash:babf5a631
+build.hash_date:2024/10/18 18:36:27 -0400
+build.label:(HEAD, tag: v24.7, origin/stable_devel, stable_devel)
+build.max_target_version:19
+build.supported_target_versions:19
+build.type:production
+build.version:24.7.241021
+ 
+2024-11-01 10:44:48.676 INFO Oracle version utility failed to determine target version for ORACLE_HOME /Users/ribas/iCloud/Oracle/00_DBNitro/dbnitro/tools/AutoUpgrade 
+2024-11-01 10:44:48.677 INFO Oracle Base utility failed to determine ORACLE_BASE for ORACLE_HOME /Users/ribas/iCloud/Oracle/00_DBNitro/dbnitro/tools/AutoUpgrade 
+2024-11-01 10:44:48.677 INFO Oracle Base Configuration utility failed to determine ORACLE_BASE for ORACLE_HOME /Users/ribas/iCloud/Oracle/00_DBNitro/dbnitro/tools/AutoUpgrade 
+2024-11-01 10:44:48.677 INFO Oracle Base Home utility failed to determine ORACLE_BASE for ORACLE_HOME /Users/ribas/iCloud/Oracle/00_DBNitro/dbnitro/tools/AutoUpgrade 
+2024-11-01 10:44:48.784 INFO Finished processing dbEntry upg1 
+2024-11-01 10:44:49.415 ERROR *Downloading Oracle Patch files
+Patch query failed
+*Connection Failed - You entered an incorrect user name or password.*
+ 
+2024-11-01 10:45:04.656 INFO 
+build.MOS_LINK:https://support.oracle.com/epmos/faces/DocumentDisplay?id=2485457.1
+build.MOS_NOTE:2485457.1
+build.date:2024/10/21 11:16:05 -0400
+build.hash:babf5a631
+build.hash_date:2024/10/18 18:36:27 -0400
+build.label:(HEAD, tag: v24.7, origin/stable_devel, stable_devel)
+build.max_target_version:19
+build.supported_target_versions:19
+build.type:production
+build.version:24.7.241021
+ 
+2024-11-01 10:45:06.314 INFO Oracle version utility failed to determine target version for ORACLE_HOME /Users/ribas/iCloud/Oracle/00_DBNitro/dbnitro/tools/AutoUpgrade 
+2024-11-01 10:45:06.314 INFO Oracle Base utility failed to determine ORACLE_BASE for ORACLE_HOME /Users/ribas/iCloud/Oracle/00_DBNitro/dbnitro/tools/AutoUpgrade 
+2024-11-01 10:45:06.315 INFO Oracle Base Configuration utility failed to determine ORACLE_BASE for ORACLE_HOME /Users/ribas/iCloud/Oracle/00_DBNitro/dbnitro/tools/AutoUpgrade 
+2024-11-01 10:45:06.315 INFO Oracle Base Home utility failed to determine ORACLE_BASE for ORACLE_HOME /Users/ribas/iCloud/Oracle/00_DBNitro/dbnitro/tools/AutoUpgrade 
+2024-11-01 10:45:07.946 INFO Finished processing dbEntry upg1 
+2024-11-01 10:49:05.001 INFO 
+build.MOS_LINK:https://support.oracle.com/epmos/faces/DocumentDisplay?id=2485457.1
+build.MOS_NOTE:2485457.1
+build.date:2024/10/21 11:16:05 -0400
+build.hash:babf5a631
+build.hash_date:2024/10/18 18:36:27 -0400
+build.label:(HEAD, tag: v24.7, origin/stable_devel, stable_devel)
+build.max_target_version:19
+build.supported_target_versions:19
+build.type:production
+build.version:24.7.241021
+ 
+2024-11-01 10:49:07.314 INFO Oracle version utility failed to determine target version for ORACLE_HOME /Users/ribas/iCloud/Oracle/00_DBNitro/dbnitro/tools/AutoUpgrade 
+2024-11-01 10:49:07.314 INFO Oracle Base utility failed to determine ORACLE_BASE for ORACLE_HOME /Users/ribas/iCloud/Oracle/00_DBNitro/dbnitro/tools/AutoUpgrade 
+2024-11-01 10:49:07.314 INFO Oracle Base Configuration utility failed to determine ORACLE_BASE for ORACLE_HOME /Users/ribas/iCloud/Oracle/00_DBNitro/dbnitro/tools/AutoUpgrade 
+2024-11-01 10:49:07.314 INFO Oracle Base Home utility failed to determine ORACLE_BASE for ORACLE_HOME /Users/ribas/iCloud/Oracle/00_DBNitro/dbnitro/tools/AutoUpgrade 
+2024-11-01 10:49:07.433 INFO Finished processing dbEntry upg1 
+2024-11-01 10:49:08.087 ERROR *Downloading Oracle Patch files
+Patch query failed
+*Connection Failed - You entered an incorrect user name or password.*
+ 
+2024-11-01 10:51:16.450 INFO 
+build.MOS_LINK:https://support.oracle.com/epmos/faces/DocumentDisplay?id=2485457.1
+build.MOS_NOTE:2485457.1
+build.date:2024/10/21 11:16:05 -0400
+build.hash:babf5a631
+build.hash_date:2024/10/18 18:36:27 -0400
+build.label:(HEAD, tag: v24.7, origin/stable_devel, stable_devel)
+build.max_target_version:19
+build.supported_target_versions:19
+build.type:production
+build.version:24.7.241021
+ 
+2024-11-01 10:51:18.116 INFO Oracle version utility failed to determine target version for ORACLE_HOME /Users/ribas/iCloud/Oracle/00_DBNitro/dbnitro/tools/AutoUpgrade 
+2024-11-01 10:51:18.117 INFO Oracle Base utility failed to determine ORACLE_BASE for ORACLE_HOME /Users/ribas/iCloud/Oracle/00_DBNitro/dbnitro/tools/AutoUpgrade 
+2024-11-01 10:51:18.117 INFO Oracle Base Configuration utility failed to determine ORACLE_BASE for ORACLE_HOME /Users/ribas/iCloud/Oracle/00_DBNitro/dbnitro/tools/AutoUpgrade 
+2024-11-01 10:51:18.117 INFO Oracle Base Home utility failed to determine ORACLE_BASE for ORACLE_HOME /Users/ribas/iCloud/Oracle/00_DBNitro/dbnitro/tools/AutoUpgrade 
+2024-11-01 10:51:18.228 INFO Finished processing dbEntry upg1 
+2024-11-01 10:51:19.253 ERROR *Downloading Oracle Patch files
+Patch query failed
+*Connection Failed - You entered an incorrect user name or password.*
+ 
+2024-11-01 10:57:51.730 INFO 
+build.MOS_LINK:https://support.oracle.com/epmos/faces/DocumentDisplay?id=2485457.1
+build.MOS_NOTE:2485457.1
+build.date:2024/10/21 11:16:05 -0400
+build.hash:babf5a631
+build.hash_date:2024/10/18 18:36:27 -0400
+build.label:(HEAD, tag: v24.7, origin/stable_devel, stable_devel)
+build.max_target_version:19
+build.supported_target_versions:19
+build.type:production
+build.version:24.7.241021
+ 
+2024-11-01 10:57:53.431 INFO Oracle version utility failed to determine target version for ORACLE_HOME /Users/ribas/iCloud/Oracle/00_DBNitro/dbnitro/tools/AutoUpgrade 
+2024-11-01 10:57:53.431 INFO Oracle Base utility failed to determine ORACLE_BASE for ORACLE_HOME /Users/ribas/iCloud/Oracle/00_DBNitro/dbnitro/tools/AutoUpgrade 
+2024-11-01 10:57:53.432 INFO Oracle Base Configuration utility failed to determine ORACLE_BASE for ORACLE_HOME /Users/ribas/iCloud/Oracle/00_DBNitro/dbnitro/tools/AutoUpgrade 
+2024-11-01 10:57:53.432 INFO Oracle Base Home utility failed to determine ORACLE_BASE for ORACLE_HOME /Users/ribas/iCloud/Oracle/00_DBNitro/dbnitro/tools/AutoUpgrade 
+2024-11-01 10:57:53.537 INFO Finished processing dbEntry upg1 
+2024-11-01 10:57:54.162 ERROR *Downloading Oracle Patch files
+Patch query failed
+*Connection Failed - You entered an incorrect user name or password.*
+ 
