@@ -1,0 +1,48 @@
+#
+Author="Andre Augusto Ribas"
+SoftwareVersion="1.0.7"
+DateCreation="18/08/2021"
+DateModification="19/08/2024"
+EMAIL="ribas@dbnitro.net"
+GITHUB="https://github.com/dbaribas/dbnitro.net"
+WEBSITE="http://dbnitro.net"
+#
+SepLine() {
+  printf '%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' -  
+}
+#
+SetClear() {
+  printf "\033c"
+}
+#
+ZDL_HELP() {
+  SetClear
+  SepLine
+  ls ${DBNITRO}/sql/DBA_[0-9]*.sql
+  SepLine
+}
+#
+#########################################################################################################
+#
+# ZDL Funtions
+#
+#########################################################################################################
+# 
+#########################################################################################################
+#
+ZDL() {
+select ZDL_SQL in $(cd ${DBNITRO}/sql/; ls ZDL_[0-9]*.sql) QUIT; do
+  if [[ ${ZDL_SQL} == "QUIT" ]]; then break 1; else echo "@${DBNITRO}/sql/${ZDL_SQL};" | sqlplus -S / as sysdba; fi
+done
+}
+
+
+
+
+
+
+#
+#########################################################################################################
+# Finish of the System
+#########################################################################################################
+#
