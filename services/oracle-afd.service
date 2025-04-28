@@ -16,34 +16,3 @@ Restart=on-failure
 
 [Install]
 WantedBy=multi-user.target
-
-
-
-
-
-
-
-
-
-systemctl daemon-reload
-
-
-
-journalctl -u oracle-afd
-
-setenforce 0
-
-systemctl disable --now firewalld
-
-
-chown -R postgres.postgres /data/cluster/
-chown -R postgres.postgres /etc/patroni/
-
-
-systemctl start patroni.service
-
-ss -ltn
-
-systemctl stop patroni.service
-systemctl start patroni.service
-systemctl status patroni.service
