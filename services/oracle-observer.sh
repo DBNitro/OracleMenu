@@ -4,6 +4,7 @@ SoftwareVersion="1.0.1"
 DateCreation="23/07/2024"
 DateModification="23/07/2024"
 EMAIL="ribas@dbnitro.net"
+GITHUB="https://github.com/DBNitro"
 WEBSITE="http://dbnitro.net"
 #
 export LOG=/var/log/oracle_fsfoi_???_init.log
