@@ -3,8 +3,7 @@ Author="Andre Augusto Ribas"
 SoftwareVersion="1.0.1"
 DateCreation="23/07/2024"
 DateModification="23/07/2024"
-EMAIL_1="dba.ribas@gmail.com"
-EMAIL_2="andre.ribas@icloud.com"
+EMAIL="ribas@dbnitro.net"
 WEBSITE="http://dbnitro.net"
 #
 export LOG=/var/log/oracle_fsfoi_???_init.log
