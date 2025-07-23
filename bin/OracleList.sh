@@ -1,10 +1,10 @@
 #!/bin/sh
 Author="Andre Augusto Ribas"
-SoftwareVersion="1.0.25"
+SoftwareVersion="1.0.31"
 DateCreation="18/09/2023"
-DateModification="20/12/2024"
+DateModification="04/06/2025"
 EMAIL="ribas@dbnitro.net"
-GITHUB="https://github.com/dbaribas/dbnitro.net"
+GITHUB="https://github.com/DBNitro"
 WEBSITE="http://dbnitro.net"
 #
 # ------------------------------------------------------------------------
@@ -20,7 +20,7 @@ ORA_HOMES_IGNORE_5="${ORA_HOMES_IGNORE_0}|goldengate|ogg|gg|agent"
 if [[ "$(uname)" == "SunOS" ]]; then
   OS="Solaris"
   if [[ -f "/var/opt/oracle/oratab" ]];      then ORATAB="/var/opt/oracle/oratab";           else echo " -- THIS SERVER DOES NOT HAVE AN ORACLE DATABASE INSTALLED YET --"; continue; fi
-  if [[ -f "/var/opt/oracle/oraInst.loc" ]]; then ORA_INST="/var/opt/oracle/oraInst.loc";    else echo " -- THIS SERVER DOES NOT HAVE AN ORACLE INSTALLATION YET --"; exit 1; fi
+  if [[ -f "/var/opt/oracle/oraInst.loc" ]]; then ORA_INST="/var/opt/oracle/oraInst.loc";    else echo " -- THIS SERVER DOES NOT HAVE AN ORACLE INSTALLATION YET --";       continue; fi
   ORA_INVENTORY="$(cat ${ORA_INST}      | egrep -i "inventory_loc"                           | cut -f2 -d '=')/ContentsXML/inventory.xml"
   ASM_PROC="$(ps -ef                    | egrep -i -v "grep|egrep|sed"                       | egrep -i "asm_pmon"            | awk '{ print $NF }'          | sed s/asm_pmon_//g | uniq              | sort  | wc -l | xargs)"
   CRSD_PROC="$(ps -ef                   | egrep -i -v 'grep|egrep'                           | egrep -i 'crsd.bin'            | uniq                         | sort               | wc -l             | xargs)"
@@ -34,8 +34,11 @@ if [[ "$(uname)" == "SunOS" ]]; then
   OMS_PROC="$(ps -ef                    | egrep -i -v "grep|egrep|zabbix|webmin"             | egrep -i "wlserver"            | uniq                         | sort               | wc -l             | xargs)"
   WLS_PROC="$(ps -ef                    | egrep -i -v "grep|egrep|zabbix|webmin"             | egrep -i "wlserver"            | uniq                         | sort               | wc -l             | xargs)"
   OGG_PROC="$(ps -ef                    | egrep -i -v "grep|egrep|zabbix|qmgr|clmgrs|dgmgrl" | egrep -i "mgr|prm"             | uniq                         | sort               | wc -l             | xargs)"
-  ASM_HOME="$(cat ${ORA_INVENTORY}      | egrep -i -v "${ORA_HOMES_IGNORE_0}"                | egrep -i "LOC"                 | egrep -i "OraGI"             | awk '{ print $3 }' | cut -f2 -d '='    | cut -f2 -d '"' | uniq | sort)"
-  DATABASE_HOME="$(cat ${ORA_INVENTORY} | egrep -i -v "${ORA_HOMES_IGNORE_0}"                | egrep -i "LOC"                 | egrep -i "OraDB|OraHome"     | awk '{ print $3 }' | cut -f2 -d '='    | cut -f2 -d '"' | uniq | sort)"
+  MYSQL_PROC="$(ps -ef                  | egrep -i -v "grep|egrep|sed"                       | egrep -i "bin/mysqld"          | awk '{ print $NF }'          | sort               | wc -l             | uniq | xargs)"
+  PSQL_PROC="$(ps -ef                   | egrep -i -v "grep|egrep|sed"                       | egrep -i "bin/postgres"        | awk '{ print $NF }'          | sort               | wc -l             | uniq | xargs)"
+  DB2_PROC="$(ps -ef                    | egrep -i -v "grep|egrep|sed"                       | egrep -i "ibm/db2"             | awk '{ print $NF }'          | sort               | wc -l             | uniq | xargs)"
+  ASM_HOME="$(cat ${ORA_INVENTORY}      | egrep -i -v "${ORA_HOMES_IGNORE_1}"                | egrep -i "LOC"                 | egrep -i "OraGI"             | awk '{ print $3 }' | cut -f2 -d '='    | cut -f2 -d '"' | uniq | sort)"
+  DATABASE_HOME="$(cat ${ORA_INVENTORY} | egrep -i -v "${ORA_HOMES_IGNORE_1}"                | egrep -i "LOC"                 | egrep -i "OraDB|OraHome"     | awk '{ print $3 }' | cut -f2 -d '='    | cut -f2 -d '"' | uniq | sort)"
   CLIENT_HOME="$(cat ${ORA_INVENTORY}   | egrep -i -v "${ORA_HOMES_IGNORE_0}"                | egrep -i "LOC"                 | egrep -i "OraClient"         | awk '{ print $3 }' | cut -f2 -d '='    | cut -f2 -d '"' | uniq | sort)"
   AGENT_HOME="$(cat ${ORA_INVENTORY}    | egrep -i -v "${ORA_HOMES_IGNORE_0}"                | egrep -i "LOC"                 | egrep -i "agent"             | awk '{ print $3 }' | cut -f2 -d '='    | cut -f2 -d '"' | uniq | sort)"
   OMS_HOME="$(cat ${ORA_INVENTORY}      | egrep -i -v "${ORA_HOMES_IGNORE_0}"                | egrep -i "LOC"                 | egrep -i "oms"               | awk '{ print $3 }' | cut -f2 -d '='    | cut -f2 -d '"' | uniq | sort)"
@@ -45,7 +48,7 @@ if [[ "$(uname)" == "SunOS" ]]; then
 elif [[ "$(uname)" == "AIX" ]]; then
   OS="AIX"
   if [[ -f "/etc/oratab" ]];                 then ORATAB="/etc/oratab";                      else echo " -- THIS SERVER DOES NOT HAVE AN ORACLE DATABASE INSTALLED YET --"; continue; fi
-  if [[ -f "/opt/oracle/etc/oraInst.loc" ]]; then ORA_INST="/opt/oracle/etc/oraInst.loc";    else echo " -- THIS SERVER DOES NOT HAVE AN ORACLE INSTALLATION YET --"; exit 1; fi
+  if [[ -f "/opt/oracle/etc/oraInst.loc" ]]; then ORA_INST="/opt/oracle/etc/oraInst.loc";    else echo " -- THIS SERVER DOES NOT HAVE AN ORACLE INSTALLATION YET --";       continue; fi
   ORA_INVENTORY="$(cat ${ORA_INST}      | egrep -i "inventory_loc"                           | cut -f2 -d '=')/ContentsXML/inventory.xml"
   ASM_PROC="$(ps -ef                    | egrep -i -v "grep|egrep|sed"                       | egrep -i "asm_pmon"            | awk '{ print $NF }'          | sed s/asm_pmon_//g | uniq              | sort  | wc -l | xargs)"
   CRSD_PROC="$(ps -ef                   | egrep -i -v 'grep|egrep'                           | egrep -i 'crsd.bin'            | uniq                         | sort               | wc -l             | xargs)"
@@ -59,8 +62,11 @@ elif [[ "$(uname)" == "AIX" ]]; then
   OMS_PROC="$(ps -ef                    | egrep -i -v "grep|egrep|zabbix|webmin"             | egrep -i "wlserver"            | uniq                         | sort               | wc -l             | xargs)"
   WLS_PROC="$(ps -ef                    | egrep -i -v "grep|egrep|zabbix|webmin"             | egrep -i "wlserver"            | uniq                         | sort               | wc -l             | xargs)"
   OGG_PROC="$(ps -ef                    | egrep -i -v "grep|egrep|zabbix|qmgr|clmgrs|dgmgrl" | egrep -i "mgr|prm"             | uniq                         | sort               | wc -l             | xargs)"
-  ASM_HOME="$(cat ${ORA_INVENTORY}      | egrep -i -v "${ORA_HOMES_IGNORE_0}"                | egrep -i "LOC"                 | egrep -i "OraGI"             | awk '{ print $3 }' | cut -f2 -d '='    | cut -f2 -d '"' | uniq | sort)"
-  DATABASE_HOME="$(cat ${ORA_INVENTORY} | egrep -i -v "${ORA_HOMES_IGNORE_0}"                | egrep -i "LOC"                 | egrep -i "OraDB|OraHome"     | awk '{ print $3 }' | cut -f2 -d '='    | cut -f2 -d '"' | uniq | sort)"
+  MYSQL_PROC="$(ps -ef                  | egrep -i -v "grep|egrep|sed"                       | egrep -i "bin/mysqld"          | awk '{ print $NF }'          | sort               | wc -l             | uniq | xargs)"
+  PSQL_PROC="$(ps -ef                   | egrep -i -v "grep|egrep|sed"                       | egrep -i "bin/postgres"        | awk '{ print $NF }'          | sort               | wc -l             | uniq | xargs)"
+  DB2_PROC="$(ps -ef                    | egrep -i -v "grep|egrep|sed"                       | egrep -i "ibm/db2"             | awk '{ print $NF }'          | sort               | wc -l             | uniq | xargs)"
+  ASM_HOME="$(cat ${ORA_INVENTORY}      | egrep -i -v "${ORA_HOMES_IGNORE_1}"                | egrep -i "LOC"                 | egrep -i "OraGI"             | awk '{ print $3 }' | cut -f2 -d '='    | cut -f2 -d '"' | uniq | sort)"
+  DATABASE_HOME="$(cat ${ORA_INVENTORY} | egrep -i -v "${ORA_HOMES_IGNORE_1}"                | egrep -i "LOC"                 | egrep -i "OraDB|OraHome"     | awk '{ print $3 }' | cut -f2 -d '='    | cut -f2 -d '"' | uniq | sort)"
   CLIENT_HOME="$(cat ${ORA_INVENTORY}   | egrep -i -v "${ORA_HOMES_IGNORE_0}"                | egrep -i "LOC"                 | egrep -i "OraClient"         | awk '{ print $3 }' | cut -f2 -d '='    | cut -f2 -d '"' | uniq | sort)"
   AGENT_HOME="$(cat ${ORA_INVENTORY}    | egrep -i -v "${ORA_HOMES_IGNORE_0}"                | egrep -i "LOC"                 | egrep -i "agent"             | awk '{ print $3 }' | cut -f2 -d '='    | cut -f2 -d '"' | uniq | sort)"
   OMS_HOME="$(cat ${ORA_INVENTORY}      | egrep -i -v "${ORA_HOMES_IGNORE_0}"                | egrep -i "LOC"                 | egrep -i "oms"               | awk '{ print $3 }' | cut -f2 -d '='    | cut -f2 -d '"' | uniq | sort)"
@@ -70,7 +76,7 @@ elif [[ "$(uname)" == "AIX" ]]; then
 elif [[ "$(uname)" == "Linux" ]]; then
   OS="Linux"
   if [[ -f "/etc/oratab" ]];            then ORATAB="/etc/oratab";                           else echo " -- THIS SERVER DOES NOT HAVE AN ORACLE DATABASE INSTALLED YET --"; continue; fi
-  if [[ -f "/etc/oraInst.loc" ]];       then ORA_INST="/etc/oraInst.loc";                    else echo " -- THIS SERVER DOES NOT HAVE AN ORACLE INSTALLATION YET --"; exit 1; fi
+  if [[ -f "/etc/oraInst.loc" ]];       then ORA_INST="/etc/oraInst.loc";                    else echo " -- THIS SERVER DOES NOT HAVE AN ORACLE INSTALLATION YET --";       continue; fi
   ORA_INVENTORY="$(cat ${ORA_INST}      | egrep -i "inventory_loc"                           | cut -f2 -d '=')/ContentsXML/inventory.xml"
   ASM_PROC="$(ps -ef                    | egrep -i -v "grep|egrep|sed"                       | egrep -i "asm_pmon"            | awk '{ print $NF }'          | sed s/asm_pmon_//g | uniq              | sort  | wc -l | xargs)"
   CRSD_PROC="$(ps -ef                   | egrep -i -v 'grep|egrep'                           | egrep -i 'crsd.bin'            | uniq                         | sort               | wc -l             | xargs)"
@@ -84,8 +90,11 @@ elif [[ "$(uname)" == "Linux" ]]; then
   OMS_PROC="$(ps -ef                    | egrep -i -v "grep|egrep|zabbix|webmin"             | egrep -i "wlserver"            | uniq                         | sort               | wc -l             | xargs)"
   WLS_PROC="$(ps -ef                    | egrep -i -v "grep|egrep|zabbix|webmin"             | egrep -i "wlserver"            | uniq                         | sort               | wc -l             | xargs)"
   OGG_PROC="$(ps -ef                    | egrep -i -v "grep|egrep|zabbix|qmgr|clmgrs|dgmgrl" | egrep -i "mgr|prm"             | uniq                         | sort               | wc -l             | xargs)"
-  ASM_HOME="$(cat ${ORA_INVENTORY}      | egrep -i -v "${ORA_HOMES_IGNORE_0}"                | egrep -i "LOC"                 | egrep -i "OraGI"             | awk '{ print $3 }' | cut -f2 -d '='    | cut -f2 -d '"' | uniq | sort)"
-  DATABASE_HOME="$(cat ${ORA_INVENTORY} | egrep -i -v "${ORA_HOMES_IGNORE_0}"                | egrep -i "LOC"                 | egrep -i "OraDB|OraHome"     | awk '{ print $3 }' | cut -f2 -d '='    | cut -f2 -d '"' | uniq | sort)"
+  MYSQL_PROC="$(ps -ef                  | egrep -i -v "grep|egrep|sed"                       | egrep -i "bin/mysqld"          | awk '{ print $NF }'          | sort               | wc -l             | uniq | xargs)"
+  PSQL_PROC="$(ps -ef                   | egrep -i -v "grep|egrep|sed"                       | egrep -i "bin/postgres"        | awk '{ print $NF }'          | sort               | wc -l             | uniq | xargs)"
+  DB2_PROC="$(ps -ef                    | egrep -i -v "grep|egrep|sed"                       | egrep -i "ibm/db2"             | awk '{ print $NF }'          | sort               | wc -l             | uniq | xargs)"
+  ASM_HOME="$(cat ${ORA_INVENTORY}      | egrep -i -v "${ORA_HOMES_IGNORE_1}"                | egrep -i "LOC"                 | egrep -i "OraGI"             | awk '{ print $3 }' | cut -f2 -d '='    | cut -f2 -d '"' | uniq | sort)"
+  DATABASE_HOME="$(cat ${ORA_INVENTORY} | egrep -i -v "${ORA_HOMES_IGNORE_1}"                | egrep -i "LOC"                 | egrep -i "OraDB|OraHome"     | awk '{ print $3 }' | cut -f2 -d '='    | cut -f2 -d '"' | uniq | sort)"
   CLIENT_HOME="$(cat ${ORA_INVENTORY}   | egrep -i -v "${ORA_HOMES_IGNORE_0}"                | egrep -i "LOC"                 | egrep -i "OraClient"         | awk '{ print $3 }' | cut -f2 -d '='    | cut -f2 -d '"' | uniq | sort)"
   AGENT_HOME="$(cat ${ORA_INVENTORY}    | egrep -i -v "${ORA_HOMES_IGNORE_0}"                | egrep -i "LOC"                 | egrep -i "agent"             | awk '{ print $3 }' | cut -f2 -d '='    | cut -f2 -d '"' | uniq | sort)"
   OMS_HOME="$(cat ${ORA_INVENTORY}      | egrep -i -v "${ORA_HOMES_IGNORE_0}"                | egrep -i "LOC"                 | egrep -i "oms"               | awk '{ print $3 }' | cut -f2 -d '='    | cut -f2 -d '"' | uniq | sort)"
@@ -100,7 +109,7 @@ fi
 # ------------------------------------------------------------------------
 # Verify oraInst.loc file
 #
-if [[ ! -f "${ORA_INST}" ]]; then echo " -- THIS SERVER DOES NOT HAVE AN ORACLE INSTALLATION YET --"; exit 1; fi
+if [[ ! -f "${ORA_INST}" ]]; then echo " -- THIS SERVER DOES NOT HAVE AN ORACLE INSTALLATION YET --"; continue; fi
 #
 # ------------------------------------------------------------------------
 # Verify ORACLE Inventory
@@ -197,10 +206,15 @@ fi
 # LISTENER
 #
 if [[ "${LISTENER_PROC}" != "0" ]]; then
+  USING_GRID="$(cat ${ORA_INVENTORY} | egrep "CRS=" | wc -l)"
   for LISTENER_SERVICE in $(ps -ef | egrep -i -v "sshd|grep|egrep|zabbix" | egrep -i "listener"               | awk '{ print $9 }' | uniq | sort); do
            LISTENER_HOME="$(ps -ef | egrep -i -v "sshd|grep|egrep|zabbix" | egrep -i -w "${LISTENER_SERVICE}" | awk '{ print $8 }' | uniq | sort | sed 's/\/bin\/tnslsnr.*//')"
         LISTENER_STARTED="$(ps -ef | egrep -i -v "sshd|grep|egrep|zabbix" | egrep -i -w "${LISTENER_SERVICE}" | awk '{ print $5 }' | uniq | tail -2)"
-           LISTENER_PORT="$(${LISTENER_HOME}/bin/lsnrctl status ${LISTENER_SERVICE} | egrep -i "PORT=" | sed -n 's/.*(PORT=\([0-9]*\)).*/\1/p' | uniq)"
+           if [[ "${USING_GRID}" == "0" ]]; then
+              LISTENER_PORT="$(${LISTENER_HOME}/bin/lsnrctl status ${LISTENER_SERVICE} | egrep -i "PORT=" | sed -n 's/.*(PORT=\([0-9]*\)).*/\1/p' | uniq)"
+            else
+              LISTENER_PORT="$(srvctl config listener -listener ${LISTENER_SERVICE} | egrep "End points:" | awk '{ print $3 }')"
+            fi
     printf "|%-31s|%-31s|%-31s|%-60s|\n" " ${LISTENER_SERVICE} [${LISTENER_PORT}]" " RUNNING " " UP SINCE: ${LISTENER_STARTED} " " ${LISTENER_HOME}"
     printf "+%-31s+%-31s+%-31s+%-50s+\n" "-------------------------------" "-------------------------------" "-------------------------------" "------------------------------------------------------------"
   done
@@ -429,8 +443,103 @@ fi
 fi
 }
 #
+# --------------------------------------------------------------------------------------------------------------------------------------------
+# 
+nonOracleServices() {
+#
+# MYSQL OK
+# POSTGRES OK
+# DB2 OK
+#
+if [[ "${MYSQL_PROC}" != "0" ]] || [[ "${PSQL_PROC}" != "0" ]] || [[ "${DB2_PROC}" != "0" ]]; then
+#
+printf "+%-31s+\n"    "-------------------------------"
+printf "|%-31s%-s|\n" " NON ORACLE SERVICES RUNNING   "
+printf "+%-31s+\n"    "-------------------------------"
+#
+printf "+%-31s+%-25s+%-25s+%-50s+\n" "-------------------------------" "-------------------------------" "-------------------------------" "------------------------------------------------------------"
+printf "|%-31s|%-25s|%-25s|%-50s|\n" " SERVICE                       " " STATUS                        " " INFO                          " " NON ORACLE HOME                                            "
+printf "+%-31s+%-25s+%-25s+%-50s+\n" "-------------------------------" "-------------------------------" "-------------------------------" "------------------------------------------------------------"
+#
+if [[ "${MYSQL_PROC}" != "0" ]]; then
+  MYSQL_SERVICE="$(command -v mysql)"
+  MYSQL_STARTED="$(ps -ef | egrep -i -v "grep|egrep|sed" | egrep -i "bin/mysqld" | awk '{ print $5 }'  | uniq | tail -2)"
+     MYSQL_HOME="$(ps -ef | egrep -i -v "grep|egrep|sed" | egrep -i "bin/mysqld" | awk '{ print $NF }' | uniq | sort)"
+  printf "|%-31s|%-31s|%-31s|%-60s|\n" " ${MYSQL_SERVICE} " " RUNNING " " UP SINCE: ${MYSQL_STARTED} " " ${MYSQL_HOME}"
+  printf "+%-31s+%-31s+%-31s+%-50s+\n" "-------------------------------" "-------------------------------" "-------------------------------" "------------------------------------------------------------"
+fi
+#
+if [[ "${PSQL_PROC}" != "0" ]]; then
+  PSQL_SERVICE="$(command -v psql)"
+  PSQL_STARTED="$(ps -ef | egrep -i -v "grep|egrep|sed" | egrep -i "bin/postgres" | awk '{ print $5 }'  | uniq | tail -2)"
+     PSQL_HOME="$(ps -ef | egrep -i -v "grep|egrep|sed" | egrep -i "bin/postgres" | awk '{ print $NF }' | uniq | sort)"
+  printf "|%-31s|%-31s|%-31s|%-60s|\n" " ${PSQL_SERVICE} " " RUNNING " " UP SINCE: ${PSQL_STARTED} " " ${PSQL_HOME}"
+  printf "+%-31s+%-31s+%-31s+%-50s+\n" "-------------------------------" "-------------------------------" "-------------------------------" "------------------------------------------------------------"
+fi
+#
+#
+if [[ "${DB2_PROC}" != "0" ]]; then
+  DB2_SERVICE="$(ps -ef | egrep -i -v "grep|egrep|sed" | egrep -i "ibm/db2" | awk '{ print $8 }'  | uniq | tail -2)"
+  DB2_STARTED="$(ps -ef | egrep -i -v "grep|egrep|sed" | egrep -i "ibm/db2" | awk '{ print $5 }'  | uniq | tail -2)"
+     DB2_HOME="$(ps -ef | egrep -i -v "grep|egrep|sed" | egrep -i "ibm/db2" | awk '{ print $NF }' | uniq | sort)"
+  printf "|%-31s|%-31s|%-31s|%-60s|\n" " ${DB2_SERVICE} " " RUNNING " " UP SINCE: ${DB2_STARTED} " " ${DB2_HOME}"
+  printf "+%-31s+%-31s+%-31s+%-50s+\n" "-------------------------------" "-------------------------------" "-------------------------------" "------------------------------------------------------------"
+fi
+#
+fi
+}
+#
+# --------------------------------------------------------------------------------------------------------------------------------------------
+#
+nonOracleProducts() {
+#
+# MYSQL OK
+# POSTGRES OK
+# DB2 OK
+#
+### if [[ "$(command -v mysql | wc -l | xargs)" != "0" ]] || [[ "$(command -v psql | wc -l | xargs)" != "0" ]] || [[ "$(db2ls | tail -1 | wc -l | xargs)" != 0 ]]; then
+if [[ "$(command -v mysql | wc -l | xargs)" != "0" ]] || [[ "$(command -v psql | wc -l | xargs)" != "0" ]] || [[ "$(command -v db2ls | tail -1 | wc -l | xargs)" != 0 ]]; then
+#
+printf "+%-31s+\n"    "-------------------------------"
+printf "|%-31s%-s|\n" " NON ORACLE PRODUCTS INSTALLED "
+printf "+%-31s+\n"    "-------------------------------"
+#
+printf "+%-30s+%-50s+%-16s+\n" "-------------------------------" "------------------------------------------------------------" "----------------------"
+printf "|%-30s|%-50s|%-16s|\n" " PRODUCT NAME                  " " PRODUCT PATH                                               " " OWNER                "
+printf "+%-30s+%-50s+%-16s+\n" "-------------------------------" "------------------------------------------------------------" "----------------------"
+#
+if [[ "$(command -v mysql | wc -l | xargs)" != 0 ]]; then
+     MYSQL_PATH=$(command -v mysql)
+  MYSQL_VERSION=$(mysql --version | awk '{ print $3 }' | cut -d. -f1)
+    MYSQL_OWNER=$(ls -l "${MYSQL_PATH}" | awk '{ print $3 }')
+  printf "|%-31s|%-60s|%-22s|\n" " MYSQL-${MYSQL_VERSION} " " ${MYSQL_PATH} " " ${MYSQL_OWNER} "
+  printf "+%-31s+%-50s+%-16s+\n" "-------------------------------" "------------------------------------------------------------" "----------------------"
+fi
+#
+if [[ "$(command -v psql | wc -l | xargs)" != 0 ]]; then
+     PSQL_PATH=$(command -v psql)
+  PSQL_VERSION=$(psql --version | awk '{ print $3 }' | cut -d. -f1)
+    PSQL_OWNER=$(ls -l "${PSQL_PATH}" | awk '{ print $3 }')
+  printf "|%-31s|%-60s|%-22s|\n" " POSTGRES-${PSQL_VERSION} " " ${PSQL_PATH} " " ${PSQL_OWNER} "
+  printf "+%-31s+%-50s+%-16s+\n" "-------------------------------" "------------------------------------------------------------" "----------------------"
+fi
+#
+### if [[ "$(db2ls | tail -1 | wc -l | xargs)" != 0 ]]; then
+if [[ "$(command -v db2ls | tail -1 | wc -l | xargs)" != 0 ]]; then
+     DB2_PATH=$(db2ls | tail -1 | awk '{ print $1 }')
+  DB2_VERSION=$(db2ls | tail -1 | awk '{ print $2 }')
+    DB2_OWNER=$(ls -l "${DB2_PATH}/bin" | awk '{ print $3 }' | egrep -i -v "root" | egrep -Ev "^$" | uniq)
+  printf "|%-31s|%-60s|%-22s|\n" " DB2-${DB2_VERSION} " " ${DB2_PATH} " " ${DB2_OWNER} "
+  printf "+%-31s+%-50s+%-16s+\n" "-------------------------------" "------------------------------------------------------------" "----------------------"
+fi
+#
+fi
+}
+#
 OracleServices
 OracleProducts
+nonOracleServices
+nonOracleProducts
 #
 # --------------//--------------//--------------//--------------//--------------//--------------//--------------//-----
 # THE SCRIPT FINISHES HERE
