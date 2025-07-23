@@ -1,10 +1,10 @@
 #!/bin/sh
 Author="Andre Augusto Ribas"
-SoftwareVersion="1.0.131"
+SoftwareVersion="1.0.135"
 DateCreation="07/01/2021"
-DateModification="16/04/2025"
+DateModification="14/07/2025"
 EMAIL="ribas@dbnitro.net"
-GITHUB="https://github.com/dbaribas/dbnitro.net"
+GITHUB="https://github.com/DBNitro"
 WEBSITE="http://dbnitro.net"
 #
 # ------------------------------------------------------------------------
@@ -80,14 +80,14 @@ HELP() {
   printf "|%-16s|%-100s|\n" "                   GOLDENGATE " " YOU CAN SELECT THE ORACLE GOLDENGATE HOME AND TOOLS (ONLY AFTER SELECT THE ORACLE SID) ---> ogg"
   printf "|%-16s|%-100s|\n" "                         LIST " " YOU CAN SEE THE ORACLE PRODUCTS RUNNING AND/OR INSTALLED"
   printf "|%-16s|%-100s|\n" "                         INFO " " YOU CAN SEE THE ORACLE DATABASE INFO"
-  printf "|%-16s|%-100s|\n" "                         DASH " " YOU CAN SEE THE ORACLE DATABASE DASHBOARD"
-  printf "|%-16s|%-100s|\n" "                 DASH_INSTALL " " YOU CAN INSTALL THE ORACLE DATABASE DASHBOARD"
   printf "|%-16s|%-100s|\n" "                       REPORT " " YOU CAN SEE THE ORACLE DATABASE REPORT (SAVED ON ${REPORTS})"
   printf "|%-16s|%-100s|\n" "                      OPTIONS " " YOU CAN SEE THE ORACLE DATABASE OPTIONS"
   printf "|%-16s|%-100s|\n" "                   COMPONENTS " " YOU CAN SEE THE ORACLE DATABASE COMPONENTS"
   printf "|%-16s|%-100s|\n" "                    HUGEPAGES " " YOU CAN SEE THE ORACLE DATABASE HUGEPAGES RECOMMENDATIONS"
+  printf "|%-16s|%-100s|\n" "                         DASH " " YOU CAN SEE THE ORACLE DATABASE DASHBOARD"
+  printf "|%-16s|%-100s|\n" "                 DASH_INSTALL " " YOU CAN INSTALL THE ORACLE DATABASE DASHBOARD"
   printf "|%-16s|%-100s|\n" "                          DBA " " SHOW ALL DBA OPTIONS"
-  printf "|%-16s|%-100s|\n" "                          PDB " " SHOW ALL PDB OPTIONS"
+  printf "|%-16s|%-100s|\n" "                         PDBS " " SHOW ALL PDB OPTIONS"
   printf "|%-16s|%-100s|\n" "                          ASM " " SHOW ALL ASM OPTIONS"
   printf "|%-16s|%-100s|\n" "                          ODG " " SHOW ALL ODG OPTIONS"
   printf "|%-16s|%-100s|\n" "                          OGG " " SHOW ALL OGG OPTIONS"
@@ -299,14 +299,20 @@ done
 # Listener Services
 # 
 ListenerService() {
+  ### USING_GRID="$(ps -ef | egrep -v "grep|egrep" | egrep "crsd.bin|ocssd.bin|evmd.bin" | wc -l)"
+  USING_GRID="$(cat ${ORA_INVENTORY} | egrep "CRS=" | wc -l)"
 if [[ "${LSNRCTL}" != 0 ]]; then 
-  for LISTENER_SERVICE in $(ps -ef | egrep -i -v "sshd|grep|egrep|zabbix|webmin" | egrep -i "listener"               | awk '{ print $9 }' | uniq | sort); do
-           LISTENER_HOME="$(ps -ef | egrep -i -v "sshd|grep|egrep|zabbix|webmin" | egrep -i -w "${LISTENER_SERVICE}" | awk '{ print $8 }' | uniq | sort | sed 's/\/bin\/tnslsnr.*//')"
-           LISTENER_PORT="$(${LISTENER_HOME}/bin/lsnrctl status ${LISTENER_SERVICE} | egrep -i "PORT=" | sed -n 's/.*(PORT=\([0-9]*\)).*/\1/p' | uniq)"
-  printf "|%-22s|%-100s|\n" "                 [ LISTENER ] " " [ ONLINE ] [ ${LISTENER_SERVICE} ] [ ${LISTENER_PORT} ] [ ${LISTENER_HOME} ]"
+  for LISTENER_SERVICE in $(ps -ef | egrep -i -v "sshd|grep|egrep|zabbix|webmin|java|Xms*" | egrep -i "listener"               | awk '{ print $9 }' | uniq | sort); do
+           LISTENER_HOME="$(ps -ef | egrep -i -v "sshd|grep|egrep|zabbix|webmin|java|Xms*" | egrep -i -w "${LISTENER_SERVICE}" | awk '{ print $8 }' | uniq | sort | sed 's/\/bin\/tnslsnr.*//')"
+            if [[ "${USING_GRID}" == "0" ]]; then
+              LISTENER_PORT="$(${LISTENER_HOME}/bin/lsnrctl status ${LISTENER_SERVICE} | egrep -i "PORT=" | sed -n 's/.*(PORT=\([0-9]*\)).*/\1/p' | uniq)"
+            else
+              LISTENER_PORT="$(srvctl config listener -listener ${LISTENER_SERVICE} | egrep "End points:" | awk '{ print $3 }')"
+            fi
+  printf "|%-22s|%-100s|\n" "              [ LISTENER(s) ] " " [ ONLINE ] [ ${LISTENER_SERVICE} ] [ ${LISTENER_PORT} ] [ ${LISTENER_HOME} ]"
   done
 else 
-  printf "|%-22s|%-100s|\n" "                 [ LISTENER ] " " [ OFFLINE ] "
+  printf "|%-22s|%-100s|\n" "              [ LISTENER(s) ] " " [ OFFLINE ] "
 fi
 }
 #
@@ -444,7 +450,7 @@ IGNORE_DB_LOG=""
         BASE="$(${ORACLE_HOME}/bin/orabase)"
        DBLOG="$(echo "set base ${BASE}; show homes" | adrci | egrep -w "${SID}")"
   ALERTDBLOG="$(adrci exec="set base ${BASE}; set home ${DBLOG}; show tracefile" | egrep -w "alert_${SID}.log" | awk '{ print $1 }' | uniq | sort | head -n 1)"
-  tail -f -n 100 ${BASE}/${ALERTDBLOG} | egrep -v ${IGNORE_DB_LOG}
+  tail -f -n 100 ${BASE}/${ALERTDBLOG} ### | egrep -v ${IGNORE_DB_LOG}
 }
 #
 # ------------------------------------------------------------------------
@@ -657,7 +663,7 @@ get_DASH_INSTALL() {
 #
 get_DASH() {
   get_DB_Status
-if [[ "${DB_STATUS}" == "1" ]]; then echo "@${DBNITRO}/sql/DBA_EXECUTE_DASHBOARD.sql" | sqlplus -S / as sysdba; fi
+  if [[ "${DB_STATUS}" == "1" ]]; then echo "@${DBNITRO}/sql/DBA_EXECUTE_DASHBOARD.sql;" | sqlplus -S / as sysdba; fi
 }
 #
 # ------------------------------------------------------------------------
@@ -765,9 +771,6 @@ list_PDBS() {
   echo "@${DBNITRO}/sql/DBA_SHOW_LIST_PDBS.sql;" | sqlplus -S / as sysdba
 }
 #
-### PDBS="$(echo "select name || case when open_mode = 'READ WRITE' then ' [ RW ]' when open_mode = 'READ ONLY' then ' [ RO ]' when open_mode = 'MOUNTED' then ' [ MO ]' when open_mode = 'MIGRATE' then ' [ MI ]' else ' [ XX ]' end as info from v\$containers where con_id not in (0,1,2);" | sqlplus -S / as sysdba  | sed s/INFO//g | sed s/-//g)"
-### select name || ' ' || case when OPEN_MODE = 'READ WRITE' then ' [ RW ]' when OPEN_MODE = 'READ ONLY' then ' [ RO ]' when OPEN_MODE = 'MOUNTED' then ' [ MO ]' when OPEN_MODE = 'MIGRATE' then ' [ MI ]' end as PDBS from v\$containers where con_id not in (0,1,2) order by 1;
-#
 # ------------------------------------------------------------------------
 # Select the CDB and PDB
 #
@@ -775,7 +778,7 @@ list_PDBS
 SepLine
 PS3="Select the Option: "
 select PDBS in "CDB\$ROOT" $(cat ${DBNITRO}/var/Pluggable_${ORACLE_SID}.var) QUIT; do # CHECK $ROOT if will work
-if [[ "${PDBS}" == "BACK TO CDB" ]]; then
+if [[ "${PDBS}" == "CDB\$ROOT" ]]; then
   export ORACLE_PDB_SID=""
   echo "PLUGGABLE DATABASE: CDB\$ROOT"
   export PS1=$'[ ${ORACLE_SID} ]|[ ${LOGNAME}@\h:$(pwd): ]$ '
@@ -791,6 +794,21 @@ else
   return 1
 fi
 done
+}
+#
+# ------------------------------------------------------------------------
+# List PDBs
+# 
+Show_PDBS() {
+  get_DB_Status
+  if [[ "${DB_STATUS}" == "1" ]]; then
+    CONTAINER="$(echo "select cdb from v\$database;" | sqlplus -S / as sysdba | tail -2 | xargs)"
+  fi
+  #
+  PDB_LIST="$(echo "@${DBNITRO}/sql/DBA_SHOW_PDBS.sql;" | sqlplus -S / as sysdba | tail -2 | xargs | tr '\n' ' ')"
+  if [[ "${CONTAINER}" == "YES" ]]; then
+    printf "|%-22s|%-100s|\n" "                   [ PDB(s) ] " " [ ${PDB_LIST} ]"
+  fi
 }
 #
 # ------------------------------------------------------------------------
@@ -1194,6 +1212,7 @@ if [[ "$(ps -ef | egrep -i "ora_pmon|db_pmon" | egrep -i "${ORACLE_SID}" | awk '
     printf "|%-22s|%-100s|\n" "               [ ORACLE_SID ] " " [ ${ORACLE_SID} ]"
     printf "|%-22s|%-100s|\n" "          [ DATABASE_STATUS ] " " [ ${DB_STATUS} ]"
     ListenerService
+    Show_PDBS
     printf "+%-30s+%-100s+\n" "------------------------------" "----------------------------------------------------------------------------------------------------"
   fi
 #
@@ -1226,6 +1245,7 @@ if [[ "$(ps -ef | egrep -i "ora_pmon|db_pmon" | egrep -i "${ORACLE_SID}" | awk '
     printf "|%-22s|%-100s|\n" "               [ ORACLE_SID ] " " [ ${ORACLE_SID} ]"
     printf "|%-22s|%-100s|\n" "          [ DATABASE_STATUS ] " " [ ${DB_STATUS} ]"
     ListenerService
+    Show_PDBS
     printf "+%-30s+%-100s+\n" "------------------------------" "----------------------------------------------------------------------------------------------------"
   fi
 #
@@ -1241,6 +1261,7 @@ elif [[ "$(ps -ef | egrep -i "ora_pmon|db_pmon" | egrep -i "${ORACLE_SID}" | awk
   printf "|%-22s|%-100s|\n" "               [ ORACLE_SID ] " " [ ${ORACLE_SID} ]"
   printf "|%-22s|%-100s|\n" "          [ DATABASE_STATUS ] " " [ ${DB_STATUS} ]"
   ListenerService
+  ### Show_PDBS
   printf "+%-30s+%-100s+\n" "------------------------------" "----------------------------------------------------------------------------------------------------"
 fi
 export PS1=$'[ ${ORACLE_SID} ]|[ ${LOGNAME}@\h:$(pwd): ]$ '
@@ -1321,7 +1342,7 @@ alias opi='echo ORACLE_HOME:${ORACLE_HOME}; ${OPATCH}/opatch lsinventory'
 alias opl='echo ORACLE_HOME:${ORACLE_HOME}; ${OPATCH}/opatch lspatches | sort'
 alias adrci='rlwrap adrci'
 alias ad='rlwrap adrci'
-alias p='ps -ef | egrep -v "grep|egrep|ruby" | egrep "agent"'
+alias p='ps -ef | egrep -v "grep|egrep|ruby" | egrep "ogg_"'
 alias list='${DBNITRO}/bin/OracleList.sh'
 #
 OWNER="$(ls -l ${ORACLE_HOME} | awk '{ print $3 }' | egrep -i -v "root" | egrep -Ev "^$" | uniq)"
