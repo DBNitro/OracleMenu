@@ -1,8 +1,8 @@
 #!/bin/sh
 Author="Andre Augusto Ribas"
-SoftwareVersion="1.0.135"
+SoftwareVersion="1.0.143"
 DateCreation="07/01/2021"
-DateModification="14/07/2025"
+DateModification="26/08/2025"
 EMAIL="ribas@dbnitro.net"
 GITHUB="https://github.com/DBNitro"
 WEBSITE="http://dbnitro.net"
@@ -64,6 +64,13 @@ if [[ "$(which rlwrap | wc -l | awk '{ print $1 }')" == "0" ]]; then
   return 1 
 fi
 #
+if [[ "$(which fzf | wc -l | awk '{ print $1 }')" == "0" ]]; then
+  SetClear
+  SepLine
+  echo " -- You need to install fzf app --"
+  return 1 
+fi
+#
 # ------------------------------------------------------------------------
 # Help Function
 #
@@ -86,11 +93,16 @@ HELP() {
   printf "|%-16s|%-100s|\n" "                    HUGEPAGES " " YOU CAN SEE THE ORACLE DATABASE HUGEPAGES RECOMMENDATIONS"
   printf "|%-16s|%-100s|\n" "                         DASH " " YOU CAN SEE THE ORACLE DATABASE DASHBOARD"
   printf "|%-16s|%-100s|\n" "                 DASH_INSTALL " " YOU CAN INSTALL THE ORACLE DATABASE DASHBOARD"
-  printf "|%-16s|%-100s|\n" "                          DBA " " SHOW ALL DBA OPTIONS"
-  printf "|%-16s|%-100s|\n" "                         PDBS " " SHOW ALL PDB OPTIONS"
+  printf "|%-16s|%-100s|\n" "                       TOPICS " " SHOW ALL TOPICS OPTIONS"
+  printf "|%-16s|%-100s|\n" "                       EXTRAS " " SHOW ALL EXTRAS OPTIONS"
   printf "|%-16s|%-100s|\n" "                          ASM " " SHOW ALL ASM OPTIONS"
+  printf "|%-16s|%-100s|\n" "                          DBA " " SHOW ALL DBA OPTIONS"
+  printf "|%-16s|%-100s|\n" "                         RMAN " " SHOW ALL RMAN OPTIONS"
+  printf "|%-16s|%-100s|\n" "                          PDB " " SHOW ALL PDB OPTIONS"
   printf "|%-16s|%-100s|\n" "                          ODG " " SHOW ALL ODG OPTIONS"
   printf "|%-16s|%-100s|\n" "                          OGG " " SHOW ALL OGG OPTIONS"
+  printf "|%-16s|%-100s|\n" "                          ODA " " SHOW ALL ODA OPTIONS"
+  printf "|%-16s|%-100s|\n" "                          EXA " " SHOW ALL EXA OPTIONS"
   printf "+%-30s+%-100s+\n" "------------------------------" "----------------------------------------------------------------------------------------------------"
 }
 #
@@ -107,7 +119,7 @@ ORA_HOMES_IGNORE_1="${ORA_HOMES_IGNORE_0}|goldengate|ogg|gg|middleware|agent|Ora
 ORA_HOMES_IGNORE_2="${ORA_HOMES_IGNORE_0}|goldengate|ogg|gg|middleware"
 ORA_HOMES_IGNORE_3="${ORA_HOMES_IGNORE_0}|middleware|agent"
 ORA_HOMES_IGNORE_4="${ORA_HOMES_IGNORE_0}|goldengate|ogg|gg|agent"
-ORA_HOMES_IGNORE_5="+apx|-mgmtdb"
+ORA_HOMES_IGNORE_5="^#|^$|+apx|-mgmtdb"
 ORA_HOMES_IGNORE_6="grep|egrep|zabbix|webmin"
 #
 if [[ "$(uname)" == "SunOS" ]]; then
@@ -205,7 +217,7 @@ elif [[ "$(uname)" == "Linux" ]]; then
   ORA_OMS="$(cat ${ORA_INVENTORY}   | egrep -i -v "${ORA_HOMES_IGNORE_4}" | egrep -i "LOC"      | egrep -i "middleware|oms"    | awk '{ print $2 }' | cut -f2 -d '=' | cut -f2 -d '"' | uniq | sort)"
   ORA_WLS="$(cat ${ORA_INVENTORY}   | egrep -i -v "${ORA_HOMES_IGNORE_4}" | egrep -i "LOC"      | egrep -i "OracleHome1"       | awk '{ print $3 }' | cut -f2 -d '=' | cut -f2 -d '"' | uniq | sort)"
   DBLIST="$(cat ${ORATAB}           | egrep -i -v "${ORA_HOMES_IGNORE_5}" | egrep -i ":N|:Y"    | cut -f1 -d ':'               | uniq               | sort)"
-  ASM="$(cat ${ORATAB}              | egrep -i -v "${ORA_HOMES_IGNORE_5}" | egrep -i "+ASM*"    | cut -f1 -d ':'               | uniq               | sort           | wc -l)"
+  ASM="$(cat ${ORATAB}              | egrep -i -v "${ORA_HOMES_IGNORE_5}" | egrep "+ASM*"    | cut -f1 -d ':'               | uniq               | sort           | wc -l)"
   LSNRCTL="$(ps -ef                 | egrep -i -v "${ORA_HOMES_IGNORE_6}" | egrep -i "tnslsnr"  | wc -l)"
   GRID="$(ps -ef                    | egrep -i -v "${ORA_HOMES_IGNORE_6}" | egrep -i "asm_"     | wc -l)"
   T_MEM="$(free -g -h               | egrep -i "Mem"                      | awk '{ print $2 }')"
@@ -245,7 +257,7 @@ if [[ ! -f "${ORATAB}" ]]; then
   SepLine
   return 1
 fi
-#
+# 
 # ------------------------------------------------------------------------
 # Set ORACLE Inventory
 #
@@ -265,34 +277,288 @@ for FUNC in $(ls ${FUNCTIONS}/*_Functions); do
   source ${FUNC}
 done
 #
+# ------------------------------------------------------------------------
+# SQL Scripts
+#
+TOPICS() {
+TOPICS=("EXTRAS" "ASM" "DBA" "RMAN" "PDB" "ODG" "OGG" "RAC" "ODA" "EXA")
+TOPICS_LIST=$( {  
+  printf "%s\n" "${TOPICS[@]}" 
+} | fzf --prompt="Select a Topic You Want to See: " --header='CTRL-c or ESC to quit' --reverse --border --style full)
+[[ -z "${TOPICS_LIST}" ]] && return
+case "${TOPICS_LIST}" in
+  "EXTRAS") EXTRAS ;;
+  "ASM")    ASM    ;;
+  "DBA")    DBA    ;;
+  "RMAN")   RMAN   ;;
+  "PDB")    PDB    ;;
+  "ODG")    ODG    ;;
+  "OGG")    OGG    ;;
+  "RAC")    RAC    ;;
+  "ODA")    ODA    ;;
+  "EXA")    EXA    ;;
+  *) echo "TEST"   ;;
+esac
+}
+#
+EXTRAS() {
+local SQL_DIR=${STATEMENTS}/EXTRAS
+local SQL_FILE
+SQL_FILE=$((ls -1 ${SQL_DIR}/DBNITRO_*.sql 2>/dev/null | sort) | fzf --preview 'cat {}' --prompt="Select EXTRAS SQL: " --header='CTRL-c or ESC to quit | r to repeat' --reverse --border --style full)
+[[ -z "${SQL_FILE}" ]] && return
+if [[ "${SQL_FILE}" == "QUIT" ]]; then
+  return
+else
+  echo "@${SQL_FILE};" | sqlplus -S / as sysdba
+  SepLine
+  echo "Press CTRL-C or ESC to quit, 'r' to repeat, or ENTER to continue"
+  while true; do
+    read -rsn1 EXIT
+    if [[ ${EXIT} == $'\x1b' ]]; then
+      break
+    elif [[ ${EXIT} == "r" ]]; then
+      echo "@${SQL_FILE};" | sqlplus -S / as sysdba
+      SepLine
+      echo "Press CTRL-C or ESC to quit, 'r' to repeat, or ENTER to continue"
+    elif [[ ${EXIT} == "" ]]; then
+      EXTRAS
+    fi
+  done
+fi
+}
+#
+ASM() {
+local SQL_DIR=${STATEMENTS}/ASM
+local SQL_FILE
+SQL_FILE=$((ls -1 ${SQL_DIR}/ASM_*.sql 2>/dev/null | sort) | fzf --preview 'cat {}' --prompt="Select ASM SQL: " --header='CTRL-c or ESC to quit | r to repeat' --reverse --border --style full)
+[[ -z "${SQL_FILE}" ]] && return
+if [[ "${SQL_FILE}" == "QUIT" ]]; then
+  return
+else
+  echo "@${SQL_FILE};" | sqlplus -S / as sysdba
+  SepLine
+  echo "Press CTRL-C or ESC to quit, 'r' to repeat, or ENTER to continue"
+  while true; do
+    read -rsn1 EXIT
+    if [[ ${EXIT} == $'\x1b' ]]; then
+      break
+    elif [[ ${EXIT} == "r" ]]; then
+      echo "@${SQL_FILE};" | sqlplus -S / as sysdba
+      SepLine
+      echo "Press CTRL-C or ESC to quit, 'r' to repeat, or ENTER to continue"
+    elif [[ ${EXIT} == "" ]]; then
+      ASM
+    fi
+  done
+fi
+}
+#
 DBA() {
-select DBA_SQL in $(cd ${DBNITRO}/sql/; ls DBA_[0-9]*.sql) QUIT; do
-  if [[ "${DBA_SQL}" == "QUIT" ]]; then break 1; else echo "@${DBNITRO}/sql/${DBA_SQL};" | sqlplus -S / as sysdba; fi
-done
+local SQL_DIR=${STATEMENTS}/DBA
+local SQL_FILE
+SQL_FILE=$((ls -1 ${SQL_DIR}/DBA_*.sql 2>/dev/null | sort) | fzf --preview 'cat {}' --prompt="Select DBA SQL: " --header='CTRL-c or ESC to quit | r to repeat' --reverse --border --style full)
+[[ -z "${SQL_FILE}" ]] && return
+if [[ "${SQL_FILE}" == "QUIT" ]]; then
+  return
+else
+  echo "@${SQL_FILE};" | sqlplus -S / as sysdba
+  SepLine
+  echo "Press CTRL-C or ESC to quit, 'r' to repeat, or ENTER to continue"
+  while true; do
+    read -rsn1 EXIT
+    if [[ ${EXIT} == $'\x1b' ]]; then
+      break
+    elif [[ ${EXIT} == "r" ]]; then
+      echo "@${SQL_FILE};" | sqlplus -S / as sysdba
+      SepLine
+      echo "Press CTRL-C or ESC to quit, 'r' to repeat, or ENTER to continue"
+    elif [[ ${EXIT} == "" ]]; then
+      DBA
+    fi
+  done
+fi
+}
+#
+RMAN() {
+local SQL_DIR=${STATEMENTS}/RMAN
+local SQL_FILE
+SQL_FILE=$((ls -1 ${SQL_DIR}/RMAN_*.sql 2>/dev/null | sort) | fzf --preview 'cat {}' --prompt="Select RMAN SQL: " --header='CTRL-c or ESC to quit | r to repeat' --reverse --border --style full)
+[[ -z "${SQL_FILE}" ]] && return
+if [[ "${SQL_FILE}" == "QUIT" ]]; then
+  return
+else
+  echo "@${SQL_FILE};" | sqlplus -S / as sysdba
+  SepLine
+  echo "Press CTRL-C or ESC to quit, 'r' to repeat, or ENTER to continue"
+  while true; do
+    read -rsn1 EXIT
+    if [[ ${EXIT} == $'\x1b' ]]; then
+      break
+    elif [[ ${EXIT} == "r" ]]; then
+      echo "@${SQL_FILE};" | sqlplus -S / as sysdba
+      SepLine
+      echo "Press CTRL-C or ESC to quit, 'r' to repeat, or ENTER to continue"
+    elif [[ ${EXIT} == "" ]]; then
+      RMAN
+    fi
+  done
+fi
 }
 #
 PDB() {
-select PDB_SQL in $(cd ${DBNITRO}/sql/; ls PDB_[0-9]*.sql) QUIT; do
-  if [[ "${PDB_SQL}" == "QUIT" ]]; then break 1; else echo "@${DBNITRO}/sql/${PDB_SQL};" | sqlplus -S / as sysdba; fi
-done
+local SQL_DIR=${STATEMENTS}/PDB
+local SQL_FILE
+SQL_FILE=$((ls -1 ${SQL_DIR}/PDB_*.sql 2>/dev/null | sort) | fzf --preview 'cat {}' --prompt="Select PDB SQL: " --header='CTRL-c or ESC to quit | r to repeat' --reverse --border --style full)
+[[ -z "${SQL_FILE}" ]] && return
+if [[ "${SQL_FILE}" == "QUIT" ]]; then
+  return
+else
+  echo "@${SQL_FILE};" | sqlplus -S / as sysdba
+  SepLine
+  echo "Press CTRL-C or ESC to quit, 'r' to repeat, or ENTER to continue"
+  while true; do
+    read -rsn1 EXIT
+    if [[ ${EXIT} == $'\x1b' ]]; then
+      break
+    elif [[ ${EXIT} == "r" ]]; then
+      echo "@${SQL_FILE};" | sqlplus -S / as sysdba
+      SepLine
+      echo "Press CTRL-C or ESC to quit, 'r' to repeat, or ENTER to continue"
+    elif [[ ${EXIT} == "" ]]; then
+      PDB
+    fi
+  done
+fi
 }
 #
 ODG() {
-select ODG_SQL in $(cd ${DBNITRO}/sql/; ls ODG_[0-9]*.sql) QUIT; do
-  if [[ "${ODG_SQL}" == "QUIT" ]]; then break 1; else echo "@${DBNITRO}/sql/${ODG_SQL};" | sqlplus -S / as sysdba; fi
-done
+local SQL_DIR=${STATEMENTS}/ODG
+local SQL_FILE
+SQL_FILE=$((ls -1 ${SQL_DIR}/ODG_*.sql 2>/dev/null | sort) | fzf --preview 'cat {}' --prompt="Select ODG SQL: " --header='CTRL-c or ESC to quit | r to repeat' --reverse --border --style full)
+[[ -z "${SQL_FILE}" ]] && return
+if [[ "${SQL_FILE}" == "QUIT" ]]; then
+  return
+else
+  echo "@${SQL_FILE};" | sqlplus -S / as sysdba
+  SepLine
+  echo "Press CTRL-C or ESC to quit, 'r' to repeat, or ENTER to continue"
+  while true; do
+    read -rsn1 EXIT
+    if [[ ${EXIT} == $'\x1b' ]]; then
+      break
+    elif [[ ${EXIT} == "r" ]]; then
+      echo "@${SQL_FILE};" | sqlplus -S / as sysdba
+      SepLine
+      echo "Press CTRL-C or ESC to quit, 'r' to repeat, or ENTER to continue"
+    elif [[ ${EXIT} == "" ]]; then
+      ODG
+    fi
+  done
+fi
 }
 #
 OGG() {
-select OGG_SQL in $(cd ${DBNITRO}/sql/; ls OGG_[0-9]*.sql) QUIT; do
-  if [[ "${OGG_SQL}" == "QUIT" ]]; then break 1; else echo "@${DBNITRO}/sql/${OGG_SQL};" | sqlplus -S / as sysdba; fi
-done
+local SQL_DIR=${STATEMENTS}/OGG
+local SQL_FILE
+SQL_FILE=$((ls -1 ${SQL_DIR}/OGG_*.sql 2>/dev/null | sort) | fzf --preview 'cat {}' --prompt="Select OGG SQL: " --header='CTRL-c or ESC to quit | r to repeat' --reverse --border --style full)
+[[ -z "${SQL_FILE}" ]] && return
+if [[ "${SQL_FILE}" == "QUIT" ]]; then
+  return
+else
+  echo "@${SQL_FILE};" | sqlplus -S / as sysdba
+  SepLine
+  echo "Press CTRL-C or ESC to quit, 'r' to repeat, or ENTER to continue"
+  while true; do
+    read -rsn1 EXIT
+    if [[ ${EXIT} == $'\x1b' ]]; then
+      break
+    elif [[ ${EXIT} == "r" ]]; then
+      echo "@${SQL_FILE};" | sqlplus -S / as sysdba
+      SepLine
+      echo "Press CTRL-C or ESC to quit, 'r' to repeat, or ENTER to continue"
+    elif [[ ${EXIT} == "" ]]; then
+      OGG
+    fi
+  done
+fi
 }
-# 
-ASM() {
-select ASM_SQL in $(cd ${DBNITRO}/sql/; ls ASM_[0-9]*.sql) QUIT; do
-  if [[ "${ASM_SQL}" == "QUIT" ]]; then break 1; else echo "@${DBNITRO}/sql/${ASM_SQL};" | sqlplus -S / as sysasm; fi
-done
+#
+RAC() {
+local SQL_DIR=${STATEMENTS}/RAC
+local SQL_FILE
+SQL_FILE=$((ls -1 ${SQL_DIR}/RAC_*.sql 2>/dev/null | sort) | fzf --preview 'cat {}' --prompt="Select RAC SQL: " --header='CTRL-c or ESC to quit | r to repeat' --reverse --border --style full)
+[[ -z "${SQL_FILE}" ]] && return
+if [[ "${SQL_FILE}" == "QUIT" ]]; then
+  return
+else
+  echo "@${SQL_FILE};" | sqlplus -S / as sysdba
+  SepLine
+  echo "Press CTRL-C or ESC to quit, 'r' to repeat, or ENTER to continue"
+  while true; do
+    read -rsn1 EXIT
+    if [[ ${EXIT} == $'\x1b' ]]; then
+      break
+    elif [[ ${EXIT} == "r" ]]; then
+      echo "@${SQL_FILE};" | sqlplus -S / as sysdba
+      SepLine
+      echo "Press CTRL-C or ESC to quit, 'r' to repeat, or ENTER to continue"
+    elif [[ ${EXIT} == "" ]]; then
+      RAC
+    fi
+  done
+fi
+}
+#
+ODA() {
+local SQL_DIR=${STATEMENTS}/ODA
+local SQL_FILE
+SQL_FILE=$((ls -1 ${SQL_DIR}/ODA_*.sql 2>/dev/null | sort) | fzf --preview 'cat {}' --prompt="Select ODA SQL: " --header='CTRL-c or ESC to quit | r to repeat' --reverse --border --style full)
+[[ -z "${SQL_FILE}" ]] && return
+if [[ "${SQL_FILE}" == "QUIT" ]]; then
+  return
+else
+  echo "@${SQL_FILE};" | sqlplus -S / as sysdba
+  SepLine
+  echo "Press CTRL-C or ESC to quit, 'r' to repeat, or ENTER to continue"
+  while true; do
+    read -rsn1 EXIT
+    if [[ ${EXIT} == $'\x1b' ]]; then
+      break
+    elif [[ ${EXIT} == "r" ]]; then
+      echo "@${SQL_FILE};" | sqlplus -S / as sysdba
+      SepLine
+      echo "Press CTRL-C or ESC to quit, 'r' to repeat, or ENTER to continue"
+    elif [[ ${EXIT} == "" ]]; then
+      ODA
+    fi
+  done
+fi
+}
+#
+EXA() {
+local SQL_DIR=${STATEMENTS}/EXA
+local SQL_FILE
+SQL_FILE=$((ls -1 ${SQL_DIR}/EXA_*.sql 2>/dev/null | sort) | fzf --preview 'cat {}' --prompt="Select EXA SQL: " --header='CTRL-c or ESC to quit | r to repeat' --reverse --border --style full)
+[[ -z "${SQL_FILE}" ]] && return
+if [[ "${SQL_FILE}" == "QUIT" ]]; then
+  return
+else
+  echo "@${SQL_FILE};" | sqlplus -S / as sysdba
+  SepLine
+  echo "Press CTRL-C or ESC to quit, 'r' to repeat, or ENTER to continue"
+  while true; do
+    read -rsn1 EXIT
+    if [[ ${EXIT} == $'\x1b' ]]; then
+      break
+    elif [[ ${EXIT} == "r" ]]; then
+      echo "@${SQL_FILE};" | sqlplus -S / as sysdba
+      SepLine
+      echo "Press CTRL-C or ESC to quit, 'r' to repeat, or ENTER to continue"
+    elif [[ ${EXIT} == "" ]]; then
+      EXA
+    fi
+  done
+fi
 }
 #
 # ------------------------------------------------------------------------
@@ -515,7 +781,7 @@ if [[ "${GRID}" != 0 ]]; then
   OHASD_HOME="$(ps -ef | egrep -i -v "grep|egrep|sed" | egrep -i "ohasd.bin" | awk '{ print $8 }' | uniq | sort)"
   if [[ "${OHASD}" != "0" ]]; then GI_OHASD="ONLINE"; else GI_OHASD="OFFLINE"; fi
   #
-  printf "|%-22s|%-100s|\n" "                 [ ASM/GRID ] " " [ ONLINE ] "
+  printf "|%-22s|%-100s|\n" "                 [ ASM/GRID ] " " [ ONLINE ] [ $(echo "SELECT DECODE (COUNT(*), 1, 'HAS - Single Instance with Grid', 'CRS - RAC Cluster') FROM gv\$instance;" | sqlplus -S / as sysasm | tail -2) ] "
   printf "|%-22s|%-100s|\n" "                     [ CRSD ] " " [ ${GI_CRSD} ] [ $(if [[ "${GI_CRSD}" == "ONLINE" ]]; then echo "${CRSD_HOME}"; else echo "---"; fi) ] "
   printf "|%-22s|%-100s|\n" "                    [ OCSSD ] " " [ ${GI_OCSSD} ] [ $(if [[ "${GI_OCSSD}" == "ONLINE" ]]; then echo "${OCSSD_HOME}"; else echo "---"; fi) ] "
   printf "|%-22s|%-100s|\n" "                    [ OHASD ] " " [ ${GI_OHASD} ] [ $(if [[ "${GI_OHASD}" == "ONLINE" ]]; then echo "${OHASD_HOME}"; else echo "---"; fi) ] "
@@ -647,7 +913,7 @@ fi
 #
 get_INFO() {
   get_DB_Status
-  if [[ "${DB_STATUS}" == "1" ]]; then echo "@${DBNITRO}/sql/DBA_INFO.sql;" | sqlplus -S / as sysdba; fi
+  if [[ "${DB_STATUS}" == "1" ]]; then echo "@${DBNITRO}/sql/EXTRAS/DBNITRO_DATABASE_INFO.sql;" | sqlplus -S / as sysdba; fi
 }
 #
 # ------------------------------------------------------------------------
@@ -655,7 +921,7 @@ get_INFO() {
 #
 get_DASH_INSTALL() {
   get_DB_Status
-  if [[ "${DB_STATUS}" == "1" ]]; then echo "@${DBNITRO}/sql/DBA_CREATE_DASHBOARD.sql;" | sqlplus -S / as sysdba; fi
+  if [[ "${DB_STATUS}" == "1" ]]; then echo "@${DBNITRO}/sql/EXTRAS/DBNITRO_CREATE_DASHBOARD.sql;" | sqlplus -S / as sysdba; fi
 }
 #
 # ------------------------------------------------------------------------
@@ -663,7 +929,7 @@ get_DASH_INSTALL() {
 #
 get_DASH() {
   get_DB_Status
-  if [[ "${DB_STATUS}" == "1" ]]; then echo "@${DBNITRO}/sql/DBA_EXECUTE_DASHBOARD.sql;" | sqlplus -S / as sysdba; fi
+  if [[ "${DB_STATUS}" == "1" ]]; then echo "@${DBNITRO}/sql/EXTRAS/DBNITRO_EXECUTE_DASHBOARD.sql;" | sqlplus -S / as sysdba; fi
 }
 #
 # ------------------------------------------------------------------------
@@ -671,7 +937,7 @@ get_DASH() {
 #
 get_OPTIONS() {
   get_DB_Status
-  if [[ "${DB_STATUS}" == "1" ]]; then echo "@${DBNITRO}/sql/DBA_OPTIONS_PACKS_USAGE_STATISTICS.sql;" | sqlplus -S / as sysdba; fi
+  if [[ "${DB_STATUS}" == "1" ]]; then echo "@${DBNITRO}/sql/EXTRAS/DBNITRO_OPTIONS_PACKS_USAGE_STATISTICS.sql;" | sqlplus -S / as sysdba; fi
 }
 #
 # ------------------------------------------------------------------------
@@ -679,7 +945,7 @@ get_OPTIONS() {
 #
 get_COMPONENTS() {
   get_DB_Status
-  if [[ "${DB_STATUS}" == "1" ]]; then echo "@${DBNITRO}/sql/DBA_COMPONENTS.sql;" | sqlplus -S / as sysdba; fi
+  if [[ "${DB_STATUS}" == "1" ]]; then echo "@${DBNITRO}/sql/DBNITRO_DATABASE_COMPONENTS.sql;" | sqlplus -S / as sysdba; fi
 }
 #
 # ------------------------------------------------------------------------
@@ -687,7 +953,7 @@ get_COMPONENTS() {
 #
 get_ODG_STATUS() {
   get_DB_Status
-  if [[ "${DB_STATUS}" == "1" ]]; then echo "@${DBNITRO}/sql/DBA_DATAGUARD_STATUS.sql;" | sqlplus -S / as sysdba; fi
+  if [[ "${DB_STATUS}" == "1" ]]; then echo "@${DBNITRO}/sql/EXTRAS/DBNITRO_DATAGUARD_STATUS.sql;" | sqlplus -S / as sysdba; fi
 }
 #
 # ------------------------------------------------------------------------
@@ -695,7 +961,7 @@ get_ODG_STATUS() {
 #
 get_REPORT() {
   get_DB_Status
-  if [[ "${DB_STATUS}" == "1" ]]; then echo "@${DBNITRO}/sql/DBA_REPORT_V.3.0.1.sql;" | sqlplus -S / as sysdba; fi
+  if [[ "${DB_STATUS}" == "1" ]]; then echo "@${DBNITRO}/sql/EXTRAS/DBNITRO_REPORT_V.3.0.1.sql;" | sqlplus -S / as sysdba; fi
 }
 #
 # ------------------------------------------------------------------------
@@ -739,8 +1005,8 @@ fi
 set_PDB() {
   get_DB_Status
   if [[ "${DB_STATUS}" == "1" ]]; then
-   VERSION="$(echo "select substr(version,1,2) as version from v\$instance;" | sqlplus -S / as sysdba | tail -2)"
- CONTAINER="$(echo "select cdb from v\$database;" | sqlplus -S / as sysdba | tail -2)"
+   VERSION="$(echo "select substr(version,1,2) as version from v\$instance;"            | sqlplus -S / as sysdba | tail -2)"
+ CONTAINER="$(echo "select cdb from v\$database;"                                       | sqlplus -S / as sysdba | tail -2)"
 PLUGGABLES="$(echo "select count(NAME) from v\$containers where con_id not in (0,1,2);" | sqlplus -S / as sysdba | tail -2)"
 fi
 #
@@ -765,35 +1031,39 @@ EOF
 fi
 #
 # ------------------------------------------------------------------------
-# List of PDBs
+# Select the CDB and PDB
 #
-list_PDBS() {
-  echo "@${DBNITRO}/sql/DBA_SHOW_LIST_PDBS.sql;" | sqlplus -S / as sysdba
+FIXED_CDB_PDB=("CDB\$ROOT" "PDB\$SEED")
+PDB_LIST_VAR=$(cat "${DBNITRO}/var/Pluggable_${ORACLE_SID}.var")
+PDBS=$(
+    {  printf "%s\n" "${FIXED_CDB_PDB[@]}"
+       printf "%s\n" "${PDB_LIST_VAR[@]}"
+    } | fzf --prompt="Select The CDB or PDB: " --header='CTRL-c or ESC to quit' --reverse --border --style full)
+[[ -z "${PDBS}" ]] && return
+case "${PDBS}" in
+  "CDB\$ROOT")
+    export ORACLE_PDB_SID=""
+    echo "PLUGGABLE DATABASE: CDB\$ROOT"
+    export PS1=$'[ ${ORACLE_SID} ]|[ CDB:${ORACLE_SID} ]|[ ${LOGNAME}@\h:$(pwd): ]$ '
+  ;;
+  "PDB\$SEED")
+    export ORACLE_PDB_SID="${PDBS}"
+    echo "PLUGGABLE DATABASE: PDB\$SEED"
+    export PS1=$'[ ${ORACLE_SID} ]|[ PDB:${ORACLE_PDB_SID} ]|[ ${LOGNAME}@\h:$(pwd): ]$ '
+  ;;
+  *)
+    export ORACLE_PDB_SID="${PDBS}"
+    echo "PLUGGABLE DATABASE: ${ORACLE_PDB_SID}"
+    export PS1=$'[ ${ORACLE_SID} ]|[ PDB:${ORACLE_PDB_SID} ]|[ ${LOGNAME}@\h:$(pwd): ]$ '
+  ;;
+esac
 }
 #
 # ------------------------------------------------------------------------
-# Select the CDB and PDB
+# List of PDBs
 #
-list_PDBS
-SepLine
-PS3="Select the Option: "
-select PDBS in "CDB\$ROOT" $(cat ${DBNITRO}/var/Pluggable_${ORACLE_SID}.var) QUIT; do # CHECK $ROOT if will work
-if [[ "${PDBS}" == "CDB\$ROOT" ]]; then
-  export ORACLE_PDB_SID=""
-  echo "PLUGGABLE DATABASE: CDB\$ROOT"
-  export PS1=$'[ ${ORACLE_SID} ]|[ ${LOGNAME}@\h:$(pwd): ]$ '
-  return 1
-elif [[ "${PDBS}" == "QUIT" ]]; then
-  echo " -- Exit Menu --"
-  export PS1=$'[ ${ORACLE_SID} ]|[ ${LOGNAME}@\h:$(pwd): ]$ '
-  return 1
-else
-  export ORACLE_PDB_SID="${PDBS}"
-  echo "PLUGGABLE DATABASE: ${ORACLE_PDB_SID}"
-  export PS1=$'[ ${ORACLE_SID} ]|[ PDB:${ORACLE_PDB_SID} ]|[ ${LOGNAME}@\h:$(pwd): ]$ '
-  return 1
-fi
-done
+list_PDBS() {
+  echo "@${DBNITRO}/sql/EXTRAS/DBNITRO_SHOW_LIST_PDBS.sql;" | sqlplus -S / as sysdba
 }
 #
 # ------------------------------------------------------------------------
@@ -805,7 +1075,7 @@ Show_PDBS() {
     CONTAINER="$(echo "select cdb from v\$database;" | sqlplus -S / as sysdba | tail -2 | xargs)"
   fi
   #
-  PDB_LIST="$(echo "@${DBNITRO}/sql/DBA_SHOW_PDBS.sql;" | sqlplus -S / as sysdba | tail -2 | xargs | tr '\n' ' ')"
+  PDB_LIST="$(echo "@${DBNITRO}/sql/EXTRAS/DBNITRO_SHOW_PDBS.sql;" | sqlplus -S / as sysdba | tail -2 | xargs | tr '\n' ' ')"
   if [[ "${CONTAINER}" == "YES" ]]; then
     printf "|%-22s|%-100s|\n" "                   [ PDB(s) ] " " [ ${PDB_LIST} ]"
   fi
@@ -1156,7 +1426,8 @@ alias orat='${ORATOP}/oratop -f -i 3 / as sysdba'
 alias oratop='${ORATOP}/oratop'
 alias odg-status='get_ODG_STATUS'
 alias ogg='set_OGG'
-alias pdbs='set_PDB'
+alias pdb='set_PDB'
+alias pdbs='list_PDBS'
 alias lsm='lsmod | egrep oracle'
 alias list='${DBNITRO}/bin/OracleList.sh'
 alias INFO='get_INFO'
@@ -1465,7 +1736,7 @@ umask 0022
 #
 # Main Menu
 #
-MainMenu() {
+MainMenu2() {
 SetClear
 printf "+%-30s+%-100s+\n" "------------------------------" "----------------------------------------------------------------------------------------------------"
 printf "|%-16s|%-100s|\n" " DBNITRO.net                  " " ORACLE :: Select an Option "
@@ -1477,6 +1748,7 @@ if [[ "${OPT}" == "+ASM"* ]]; then
     SELECTION="ASM"
     set_ASM ${OPT} 
   else
+    SepLine
     echo " -- ASM USER IS DIFFERENT AS ORACLE USER --"
     echo " -- YOU MUST CONNECT AS OS USER: ${ASM_OWNER} --"
     continue
@@ -1512,6 +1784,50 @@ else
 fi
 break
 done
+}
+#
+MainMenu() {
+SetClear
+OPTIONS=("${ORA_HOMES[@]}" "${ORA_OMS[@]}" "${OGG_HOME[@]}" "${ORA_WLS[@]}" "${ORA_AGENT[@]}" "${DBLIST[@]}" "HELP")
+OPT=$(printf '%s\n' "${OPTIONS[@]}" | egrep -v '^[[:space:]]*$' | fzf --prompt="Select the Option: " --header='CTRL-C or ESC to quit' --reverse --border --style full)
+if [[ $? -ne 0 ]]; then return; fi
+if [[ "${OPT}" == "+ASM"* ]]; then
+  if [[ "${ASM_USER}" == "YES" ]]; then
+    SELECTION="ASM"
+    set_ASM "${OPT}"
+  else
+    SepLine
+    echo " -- ASM USER IS DIFFERENT AS ORACLE USER --"
+    echo " -- YOU MUST CONNECT AS OS USER: ${ASM_OWNER} --"
+    echo " -- PRESS ENTER TO RETURN --"
+    read
+    MainMenu
+  fi
+elif [[ "${ORA_HOMES[@]}" =~ "${OPT}" ]] && [[ "${OPT}" != "" ]]; then
+  SELECTION="HOME"
+  set_HOME "${OPT}"
+elif [[ "${ORA_OMS[@]}" =~ "${OPT}" ]] && [[ "${OPT}" != "" ]]; then
+  SELECTION="OMS"
+  set_OMS "${OPT}"
+elif [[ "${OGG_HOME[@]}" =~ "${OPT}" ]] && [[ "${OPT}" != "" ]]; then
+  SELECTION="OGG"
+  set_OGG_HOME "${OPT}"
+elif [[ "${ORA_WLS[@]}" =~ "${OPT}" ]] && [[ "${OPT}" != "" ]]; then
+  SELECTION="WLS"
+  set_WLS "${OPT}"
+elif [[ "${ORA_AGENT[@]}" =~ "${OPT}" ]] && [[ "${OPT}" != "" ]]; then
+  SELECTION="AGENT"
+  set_AGENT "${OPT}"
+elif [[ "${DBLIST[@]}" =~ "${OPT}" ]] && [[ "${OPT}" != "" ]]; then
+  SELECTION="DATABASE"
+  set_DB "${OPT}"
+elif [[ "${OPT}" == "HELP" ]]; then
+  SELECTION="HELP"
+  SetClear
+  HELP
+else
+  echo " -- Invalid Option --"
+fi
 }
 MainMenu
 #
