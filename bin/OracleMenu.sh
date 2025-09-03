@@ -945,7 +945,7 @@ get_OPTIONS() {
 #
 get_COMPONENTS() {
   get_DB_Status
-  if [[ "${DB_STATUS}" == "1" ]]; then echo "@${DBNITRO}/sql/DBNITRO_DATABASE_COMPONENTS.sql;" | sqlplus -S / as sysdba; fi
+  if [[ "${DB_STATUS}" == "1" ]]; then echo "@${DBNITRO}/sql/EXTRAS/DBNITRO_DATABASE_COMPONENTS.sql;" | sqlplus -S / as sysdba; fi
 }
 #
 # ------------------------------------------------------------------------
@@ -1372,7 +1372,6 @@ if [[ "${ASM_EXISTS}" == "YES" ]]; then
   alias resp='crsctl stat res -p -init'
   alias rac-status='${DBNITRO}/bin/rac-status.sh -a'
   alias rac-monitor='while true; do SetClear; ${DBNITRO}/bin/rac-status.sh -a; sleep 5; done'
-  alias list-monitor='while true; do SetClear; ${DBNITRO}/bin/OracleList.sh; sleep 5; done'
   alias asmdu='${DBNITRO}/bin/asmdu.sh -g'
   alias asmcmd='rlwrap asmcmd'
   alias a='rlwrap asmcmd -p'
@@ -1430,6 +1429,7 @@ alias pdb='set_PDB'
 alias pdbs='list_PDBS'
 alias lsm='lsmod | egrep oracle'
 alias list='${DBNITRO}/bin/OracleList.sh'
+alias list-monitor='while true; do SetClear; ${DBNITRO}/bin/OracleList.sh; sleep 5; done'
 alias INFO='get_INFO'
 alias DASH='get_DASH'
 alias DASH_INSTALL='get_DASH_INSTALL'
