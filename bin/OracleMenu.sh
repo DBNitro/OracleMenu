@@ -1,8 +1,8 @@
 #!/bin/sh
 Author="Andre Augusto Ribas"
-SoftwareVersion="1.0.143"
+SoftwareVersion="1.0.145"
 DateCreation="07/01/2021"
-DateModification="26/08/2025"
+DateModification="05/09/2025"
 EMAIL="ribas@dbnitro.net"
 GITHUB="https://github.com/DBNitro"
 WEBSITE="http://dbnitro.net"
@@ -781,7 +781,11 @@ if [[ "${GRID}" != 0 ]]; then
   OHASD_HOME="$(ps -ef | egrep -i -v "grep|egrep|sed" | egrep -i "ohasd.bin" | awk '{ print $8 }' | uniq | sort)"
   if [[ "${OHASD}" != "0" ]]; then GI_OHASD="ONLINE"; else GI_OHASD="OFFLINE"; fi
   #
-  printf "|%-22s|%-100s|\n" "                 [ ASM/GRID ] " " [ ONLINE ] [ $(echo "SELECT DECODE (COUNT(*), 1, 'HAS - Single Instance with Grid', 'CRS - RAC Cluster') FROM gv\$instance;" | sqlplus -S / as sysasm | tail -2) ] "
+  if [[ ${ORACLE_SID} == "+ASM"* ]]; then
+  printf "|%-22s|%-100s|\n" "                 [ ASM/GRID ] " " [ ONLINE ] [ $(echo "SELECT DECODE (COUNT(*), 1, 'HAS - Single Instance with Grid', 'CRS - RAC Cluster') FROM gv\$instance;" | sqlplus -S / as sysasm | tail -2) ]"
+  else
+  printf "|%-22s|%-100s|\n" "                 [ ASM/GRID ] " " [ ONLINE ] "
+  fi
   printf "|%-22s|%-100s|\n" "                     [ CRSD ] " " [ ${GI_CRSD} ] [ $(if [[ "${GI_CRSD}" == "ONLINE" ]]; then echo "${CRSD_HOME}"; else echo "---"; fi) ] "
   printf "|%-22s|%-100s|\n" "                    [ OCSSD ] " " [ ${GI_OCSSD} ] [ $(if [[ "${GI_OCSSD}" == "ONLINE" ]]; then echo "${OCSSD_HOME}"; else echo "---"; fi) ] "
   printf "|%-22s|%-100s|\n" "                    [ OHASD ] " " [ ${GI_OHASD} ] [ $(if [[ "${GI_OHASD}" == "ONLINE" ]]; then echo "${OHASD_HOME}"; else echo "---"; fi) ] "
@@ -1834,4 +1838,4 @@ MainMenu
 # --------------//--------------//--------------//--------------//--------------//--------------//--------------//-----
 # THE SCRIPT FINISHES HERE
 # --------------//--------------//--------------//--------------//--------------//--------------//--------------//-----
-#
+# 
