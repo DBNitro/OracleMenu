@@ -1,7 +1,7 @@
 -- Author...........: Andre Augusto Ribas"
--- SoftwareVersion..: 1.0.3"
+-- SoftwareVersion..: 1.0.1"
 -- DateCreation.....: 12/08/2025
--- DateModification.: 22/09/2025
+-- DateModification.: 12/08/2025
 -- EMAIL............: ribas@dbnitro.net
 -- GitHub...........: https://github.com/DBNitro
 -- WEBSITE..........: http://dbnitro.net
@@ -33,7 +33,6 @@ COL WINDOW_GROUP FOR A15
 COL STATUS FOR A10 
 DEFINE ROWNUM = 50
 
-prompt
 prompt #######################################################################
 prompt # ENABLE AUTO_TASKS_JOB_CLASS
 prompt #######################################################################
@@ -64,9 +63,11 @@ prompt #######################################################################
 prompt # This task is divided in this steps: Create Programs, Create Jobs and Enable Jobs
 prompt #######################################################################
 
+-- -------------------------------------------------------------------------------------------------------------------------
+
 prompt
 prompt #######################################################################
-prompt # Create Default Program GATHER_SYSTEM_STATS_PROG
+prompt # CREATE PROGRAM: GATHER_SYSTEM_STATS_PROG
 prompt #######################################################################
 BEGIN DBMS_SCHEDULER.CREATE_PROGRAM(
     program_name        => 'GATHER_SYSTEM_STATS_PROG'
@@ -78,9 +79,20 @@ BEGIN DBMS_SCHEDULER.CREATE_PROGRAM(
 END;
 /
 
+-- BEGIN DBMS_SCHEDULER.DROP_PROGRAM (program_name => 'GATHER_SYSTEM_STATS_PROG', force => TRUE); END;
+
 prompt
 prompt #######################################################################
-prompt # CREATE Default JOB GATHER_SYSTEM_STATS_JOB
+prompt # ENABLE PROGRAM: GATHER_SYSTEM_STATS_PROG
+prompt #######################################################################
+BEGIN DBMS_SCHEDULER.ENABLE('GATHER_SYSTEM_STATS_PROG'); END;
+/
+
+-- BEGIN DBMS_SCHEDULER.DISABLE('GATHER_SYSTEM_STATS_PROG'); END;
+
+prompt
+prompt #######################################################################
+prompt # CREATE JOB: GATHER_SYSTEM_STATS_JOB
 prompt #######################################################################
 BEGIN DBMS_SCHEDULER.CREATE_JOB(
       job_name      => 'GATHER_SYSTEM_STATS_JOB'
@@ -97,17 +109,14 @@ BEGIN DBMS_SCHEDULER.CREATE_JOB(
 END;
 /
 
-prompt
-prompt #######################################################################
-prompt # Enable Default Program
-prompt #######################################################################
-BEGIN DBMS_SCHEDULER.ENABLE('GATHER_SYSTEM_STATS_PROG');
-END;
-/
+-- EXEC DBMS_SCHEDULER.STOP_JOB (job_name => 'GATHER_SYSTEM_STATS_JOB');
+-- BEGIN DBMS_SCHEDULER.DROP_JOB (job_name => 'GATHER_SYSTEM_STATS_JOB', force => FALSE); END;
+
+-- -------------------------------------------------------------------------------------------------------------------------
 
 prompt
 prompt #######################################################################
-prompt # Create Default Program GATHER_DATABASE_STATS_PROG
+prompt # CREATE PROGRAM: GATHER_DATABASE_STATS_PROG
 prompt #######################################################################
 BEGIN DBMS_SCHEDULER.CREATE_PROGRAM(
     program_name        => 'GATHER_DATABASE_STATS_PROG'
@@ -119,9 +128,20 @@ BEGIN DBMS_SCHEDULER.CREATE_PROGRAM(
 END;
 /
 
+-- BEGIN DBMS_SCHEDULER.DROP_PROGRAM (program_name => 'GATHER_DATABASE_STATS_PROG', force => TRUE); END;
+
 prompt
 prompt #######################################################################
-prompt # CREATE Default JOB GATHER_DATABASE_STATS_JOB
+prompt # ENABLE PROGRAM: GATHER_DATABASE_STATS_PROG
+prompt #######################################################################
+BEGIN DBMS_SCHEDULER.ENABLE('GATHER_DATABASE_STATS_PROG'); END;
+/
+
+-- BEGIN DBMS_SCHEDULER.DISABLE('GATHER_DATABASE_STATS_PROG'); END;
+
+prompt
+prompt #######################################################################
+prompt # CREATE JOB: GATHER_DATABASE_STATS_JOB
 prompt #######################################################################
 BEGIN DBMS_SCHEDULER.CREATE_JOB(
       job_name      => 'GATHER_DATABASE_STATS_JOB'
@@ -138,17 +158,14 @@ BEGIN DBMS_SCHEDULER.CREATE_JOB(
 END;
 /
 
-prompt
-prompt #######################################################################
-prompt # Enable Default Program
-prompt #######################################################################
-BEGIN DBMS_SCHEDULER.ENABLE('GATHER_DATABASE_STATS_PROG');
-END;
-/
+-- EXEC DBMS_SCHEDULER.STOP_JOB (job_name => 'GATHER_DATABASE_STATS_JOB');
+-- BEGIN DBMS_SCHEDULER.DROP_JOB (job_name => 'GATHER_DATABASE_STATS_JOB', force => FALSE); END;
+
+-- -------------------------------------------------------------------------------------------------------------------------
 
 prompt
 prompt #######################################################################
-prompt # Create Default Program GATHER_DICTIONARY_STATS_PROG
+prompt # CREATE PROGRAM: GATHER_DICTIONARY_STATS_PROG
 prompt #######################################################################
 BEGIN DBMS_SCHEDULER.CREATE_PROGRAM(
     program_name        => 'GATHER_DICTIONARY_STATS_PROG'
@@ -160,9 +177,20 @@ BEGIN DBMS_SCHEDULER.CREATE_PROGRAM(
 END;
 /
 
+-- BEGIN DBMS_SCHEDULER.DROP_PROGRAM (program_name => 'GATHER_DICTIONARY_STATS_PROG', force => TRUE); END;
+
 prompt
 prompt #######################################################################
-prompt # CREATE Default JOB GATHER_DICTIONARY_STATS_JOB
+prompt # ENABLE PROGRAM: GATHER_DICTIONARY_STATS_PROG
+prompt #######################################################################
+BEGIN DBMS_SCHEDULER.ENABLE('GATHER_DICTIONARY_STATS_PROG'); END;
+/
+
+-- BEGIN DBMS_SCHEDULER.DISABLE('GATHER_DATABASE_STATS_PROG'); END;
+
+prompt
+prompt #######################################################################
+prompt # CREATE JOB: GATHER_DICTIONARY_STATS_JOB
 prompt #######################################################################
 BEGIN DBMS_SCHEDULER.CREATE_JOB(
       job_name      => 'GATHER_DICTIONARY_STATS_JOB'
@@ -179,17 +207,14 @@ BEGIN DBMS_SCHEDULER.CREATE_JOB(
 END;
 /
 
-prompt
-prompt #######################################################################
-prompt # Enable Default Program
-prompt #######################################################################
-BEGIN DBMS_SCHEDULER.ENABLE('GATHER_DICTIONARY_STATS_PROG');
-END;
-/
+-- EXEC DBMS_SCHEDULER.STOP_JOB (job_name => 'GATHER_DICTIONARY_STATS_JOB');
+-- BEGIN DBMS_SCHEDULER.DROP_JOB (job_name => 'GATHER_DICTIONARY_STATS_JOB', force => FALSE); END;
+
+-- -------------------------------------------------------------------------------------------------------------------------
 
 prompt
 prompt #######################################################################
-prompt # Create Default Program GATHER_FIXED_OBJECTS_STATS_PROG
+prompt # CREATE PROGRAM: GATHER_FIXED_OBJECTS_STATS_PROG
 prompt #######################################################################
 BEGIN DBMS_SCHEDULER.CREATE_PROGRAM(
     program_name        => 'GATHER_FIXED_OBJECTS_STATS_PROG'
@@ -201,9 +226,20 @@ BEGIN DBMS_SCHEDULER.CREATE_PROGRAM(
 END;
 /
 
+-- BEGIN DBMS_SCHEDULER.DROP_PROGRAM (program_name => 'GATHER_FIXED_OBJECTS_STATS_PROG', force => TRUE); END;
+
 prompt
 prompt #######################################################################
-prompt # CREATE Default JOB GATHER_FIXED_OBJECTS_STATS_JOB
+prompt # ENABLE PROGRAM: GATHER_FIXED_OBJECTS_STATS_PROG
+prompt #######################################################################
+BEGIN DBMS_SCHEDULER.ENABLE('GATHER_FIXED_OBJECTS_STATS_PROG'); END;
+/
+
+-- BEGIN DBMS_SCHEDULER.DISABLE('GATHER_FIXED_OBJECTS_STATS_PROG'); END;
+
+prompt
+prompt #######################################################################
+prompt # CREATE JOB: GATHER_FIXED_OBJECTS_STATS_JOB
 prompt #######################################################################
 BEGIN DBMS_SCHEDULER.CREATE_JOB(
       job_name      => 'GATHER_FIXED_OBJECTS_STATS_JOB'
@@ -220,22 +256,14 @@ BEGIN DBMS_SCHEDULER.CREATE_JOB(
 END;
 /
 
-prompt
-prompt #######################################################################
-prompt # Enable Default Program
-prompt #######################################################################
-BEGIN DBMS_SCHEDULER.ENABLE('GATHER_FIXED_OBJECTS_STATS_PROG');
-END;
-/
+-- EXEC DBMS_SCHEDULER.STOP_JOB (job_name => 'GATHER_FIXED_OBJECTS_STATS_JOB');
+-- BEGIN DBMS_SCHEDULER.DROP_JOB (job_name => 'GATHER_FIXED_OBJECTS_STATS_JOB', force => FALSE); END;
+
+-- -------------------------------------------------------------------------------------------------------------------------
 
 prompt
 prompt #######################################################################
-prompt # GATHER STATS - Default
-prompt #######################################################################
-
-prompt
-prompt #######################################################################
-prompt # Create Default Program GATHER_STATS_PROG
+prompt # CREATE PROGRAM: GATHER_STATS_PROG
 prompt #######################################################################
 BEGIN DBMS_SCHEDULER.CREATE_PROGRAM(
     program_name   => 'GATHER_STATS_PROG'
@@ -262,9 +290,20 @@ BEGIN DBMS_SCHEDULER.CREATE_PROGRAM(
 END;
 /
 
+-- BEGIN DBMS_SCHEDULER.DROP_PROGRAM (program_name => 'GATHER_STATS_PROG', force => TRUE); END;
+
 prompt
 prompt #######################################################################
-prompt # CREATE Default JOB GATHER_STATS_JOB
+prompt # ENABLE PROGRAM: GATHER_STATS_PROG
+prompt #######################################################################
+BEGIN DBMS_SCHEDULER.ENABLE('GATHER_STATS_PROG'); END;
+/
+
+-- BEGIN DBMS_SCHEDULER.DISABLE('GATHER_STATS_PROG'); END;
+
+prompt
+prompt #######################################################################
+prompt # CREATE JOB: GATHER_STATS_JOB
 prompt #######################################################################
 BEGIN DBMS_SCHEDULER.CREATE_JOB(
     job_name        => 'GATHER_STATS_JOB'
@@ -276,24 +315,17 @@ BEGIN DBMS_SCHEDULER.CREATE_JOB(
 END;
 /
 
-prompt
-prompt #######################################################################
-prompt # Enable Default Program
-prompt #######################################################################
-BEGIN DBMS_SCHEDULER.ENABLE('GATHER_STATS_PROG');
-END;
-/
+-- EXEC DBMS_SCHEDULER.STOP_JOB (job_name => 'GATHER_STATS_JOB');
+-- BEGIN DBMS_SCHEDULER.DROP_JOB (job_name => 'GATHER_STATS_JOB', force => FALSE); END;
 
-prompt #######################################################################
-prompt # GATHER STATS - CUSTOM
-prompt #######################################################################
+-- -------------------------------------------------------------------------------------------------------------------------
 
 prompt
 prompt #######################################################################
-prompt # CREATE PROGRAM GATHER_STATS_STALE_CUSTOM_PROG
+prompt # CREATE PROGRAM: GATHER_CUSTOM_STALE_STATS_PROG
 prompt #######################################################################
 BEGIN DBMS_SCHEDULER.CREATE_PROGRAM(
-    program_name        => 'GATHER_STATS_STALE_CUSTOM_PROG'
+    program_name        => 'GATHER_CUSTOM_STALE_STATS_PROG'
   , program_action      => 'BEGIN DBMS_STATS.GATHER_DATABASE_STATS(estimate_percent => 33
   , block_sample        => FALSE
   , method_opt          => ''FOR ALL INDEXED COLUMNS SIZE 254''
@@ -317,44 +349,48 @@ END;'
 END;
 /
 
+-- BEGIN DBMS_SCHEDULER.DROP_PROGRAM (program_name => 'GATHER_CUSTOM_STALE_STATS_PROG', force => TRUE); END;
+
+prompt
+prompt #######################################################################
+prompt # ENABLE PROGRAM: GATHER_STATS_STALE_CUSTOM
+prompt #######################################################################
+BEGIN DBMS_SCHEDULER.ENABLE('GATHER_CUSTOM_STALE_STATS_PROG'); END;
+/
+
+-- BEGIN DBMS_SCHEDULER.DISABLE('GATHER_CUSTOM_STALE_STATS_PROG'); END;
+
 prompt 
 prompt #######################################################################
-prompt # CREATE JOB GATHER_STALE_CUSTOM_STATS_JOB
+prompt # CREATE JOB: GATHER_CUSTOM_STALE_STATS_JOB
 prompt #######################################################################
 BEGIN DBMS_SCHEDULER.CREATE_JOB(
-      job_name       => 'GATHER_STALE_CUSTOM_STATS_JOB'
-    , program_name   => 'GATHER_STATS_STALE_CUSTOM_PROG'
+      job_name       => 'GATHER_CUSTOM_STALE_STATS_JOB'
+    , program_name   => 'GATHER_CUSTOM_STALE_STATS_PROG'
     , schedule_name  => 'WEEKNIGHT_WINDOW'
     , job_class      => 'AUTO_TASKS_JOB_CLASS'
     , comments       => 'Ribas Custom Automatic Optimiser Statistics Collection Program - Stale'
     , auto_drop      => FALSE
     , enabled        => TRUE);
   DBMS_SCHEDULER.SET_ATTRIBUTE(
-      name           => 'GATHER_STALE_CUSTOM_STATS_JOB'
+      name           => 'GATHER_CUSTOM_STALE_STATS_JOB'
     , attribute      => 'stop_on_window_close'
     , value          => FALSE);
-  DBMS_SCHEDULER.ENABLE('GATHER_STALE_CUSTOM_STATS_JOB');
+  DBMS_SCHEDULER.ENABLE('GATHER_CUSTOM_STALE_STATS_JOB');
 END;
 /
 
-prompt
-prompt #######################################################################
-prompt # ENABLE PROGRAM GATHER_STATS_STALE_CUSTOM
-prompt #######################################################################
-BEGIN DBMS_SCHEDULER.ENABLE('GATHER_STATS_STALE_CUSTOM');
-END;
-/
+-- EXEC DBMS_SCHEDULER.STOP_JOB (job_name => 'GATHER_CUSTOM_STALE_STATS_JOB');
+-- BEGIN DBMS_SCHEDULER.DROP_JOB (job_name => 'GATHER_CUSTOM_STALE_STATS_JOB', force => FALSE); END;
 
-prompt #######################################################################
-prompt # GATHER STATS - FULL
-prompt #######################################################################
+-- -------------------------------------------------------------------------------------------------------------------------
 
 prompt
 prompt #######################################################################
-prompt # CREATE PROGRAM GATHER_STATS_FULL_CUSTOM_PROG
+prompt # CREATE PROGRAM: GATHER_CUSTOM_FULL_STATS_PROG
 prompt #######################################################################
 BEGIN DBMS_SCHEDULER.CREATE_PROGRAM(
-    program_name            => 'GATHER_STATS_FULL_CUSTOM_PROG'
+    program_name            => 'GATHER_CUSTOM_FULL_STATS_PROG'
   , program_action          => 'BEGIN DBMS_STATS.GATHER_DATABASE_STATS(estimate_percent => 33
   , block_sample            => FALSE
   , method_opt              => ''FOR ALL INDEXED COLUMNS SIZE 254''
@@ -378,32 +414,40 @@ END;'
 END;
 /
 
+-- BEGIN DBMS_SCHEDULER.DROP_PROGRAM (program_name => 'GATHER_CUSTOM_FULL_STATS_PROG', force => TRUE); END;
+
 prompt
 prompt #######################################################################
-prompt # CREATE JOB GATHER_FULL_CUSTOM_STATS_JOB
+prompt # ENABLE JOB: GATHER_CUSTOM_FULL_STATS_JOB
+prompt #######################################################################
+BEGIN DBMS_SCHEDULER.ENABLE('GATHER_CUSTOM_FULL_STATS_JOB'); END;
+/
+
+-- BEGIN DBMS_SCHEDULER.DISABLE('GATHER_CUSTOM_FULL_STATS_JOB'); END;
+
+prompt
+prompt #######################################################################
+prompt # CREATE JOB: GATHER_CUSTOM_FULL_STATS_JOB
 prompt #######################################################################
 BEGIN DBMS_SCHEDULER.CREATE_JOB(
-      job_name      => 'GATHER_FULL_CUSTOM_STATS_JOB'
-    , program_name  => 'GATHER_STATS_FULL_CUSTOM_PROG'
+      job_name      => 'GATHER_CUSTOM_FULL_STATS_JOB'
+    , program_name  => 'GATHER_CUSTOM_FULL_STATS_PROG'
     , schedule_name => 'WEEKEND_WINDOW'
     , job_class     => 'AUTO_TASKS_JOB_CLASS'
     , comments      => 'Ribas Custom Automatic Optimiser Statistics Collection Program - full'
     , auto_drop     => FALSE
     , enabled       => FALSE);
-  DBMS_SCHEDULER.SET_ATTRIBUTE(name => 'GATHER_FULL_CUSTOM_STATS_JOB'
+  DBMS_SCHEDULER.SET_ATTRIBUTE(name => 'GATHER_CUSTOM_FULL_STATS_JOB'
     , attribute     => 'stop_on_window_close'
     , value         => FALSE);
-  DBMS_SCHEDULER.ENABLE('GATHER_FULL_CUSTOM_STATS_JOB');
+  DBMS_SCHEDULER.ENABLE('GATHER_CUSTOM_FULL_STATS_JOB');
 END;
 /
 
-prompt
-prompt #######################################################################
-prompt # ENABLE JOB GATHER_FULL_CUSTOM_STATS_JOB
-prompt #######################################################################
-BEGIN DBMS_SCHEDULER.ENABLE('GATHER_FULL_CUSTOM_STATS_JOB');
-END;
-/
+-- EXEC DBMS_SCHEDULER.STOP_JOB (job_name => 'GATHER_CUSTOM_FULL_STATS_JOB');
+-- BEGIN DBMS_SCHEDULER.DROP_JOB (job_name => 'GATHER_CUSTOM_FULL_STATS_JOB', force => FALSE); END;
+
+-- -------------------------------------------------------------------------------------------------------------------------
 
 prompt #######################################################################
 prompt # ENABLE WEEKNIGHT AND WEEKEND WINDOW SCHEDULERS
@@ -413,16 +457,14 @@ prompt
 prompt #######################################################################
 prompt # Enable Weeknight Window Jobs
 prompt #######################################################################
-BEGIN DBMS_SCHEDULER.ENABLE('WEEKNIGHT_WINDOW');
-END;
+BEGIN DBMS_SCHEDULER.ENABLE('WEEKNIGHT_WINDOW'); END;
 /
 
 prompt
 prompt #######################################################################
 prompt # Enable Weekend Window Jobs
 prompt #######################################################################
-BEGIN DBMS_SCHEDULER.ENABLE('WEEKEND_WINDOW');
-END;
+BEGIN DBMS_SCHEDULER.ENABLE('WEEKEND_WINDOW'); END;
 /
 
 prompt #######################################################################
@@ -447,28 +489,37 @@ prompt #######################################################################
 prompt # SCHEDULER JOB STATISTICS COLLECTION - STANDARD, STALE and FULL
 prompt #######################################################################
 col job_name for a50
-SELECT owner
-  , job_name
-  , state
-  , run_count
-  , to_char(last_start_date, 'YYYY-MM-DD HH24:MI:SS') as last_start_date
-  , to_char(next_run_date, 'YYYY-MM-DD HH24:MI:SS') as next_run_date 
-FROM DBA_SCHEDULER_JOBS 
-WHERE job_name like 'GATHER_%'
-order by 1,2,3;
+col duration for a20
+SELECT j.owner
+  , j.job_name
+  , j.state
+  , j.run_count
+  , TO_CHAR(j.last_start_date, 'YYYY-MM-DD HH24:MI:SS') AS last_start_date
+  , TO_CHAR(j.next_run_date, 'YYYY-MM-DD HH24:MI:SS') AS next_run_date
+  , CASE WHEN rd.actual_start_date IS NOT NULL AND rd.run_duration IS NOT NULL THEN TRIM(TO_CHAR(EXTRACT(HOUR FROM rd.run_duration), 'FM00')) || ':' || TRIM(TO_CHAR(EXTRACT(MINUTE FROM rd.run_duration), 'FM00')) || ' (HH:MM)' ELSE 'N/A' END AS duration
+FROM DBA_SCHEDULER_JOBS j
+LEFT JOIN (SELECT job_name, owner, actual_start_date, run_duration FROM DBA_SCHEDULER_JOB_RUN_DETAILS WHERE (owner, job_name, log_date) 
+       IN (SELECT owner, job_name, MAX(log_date) FROM DBA_SCHEDULER_JOB_RUN_DETAILS GROUP BY owner, job_name)) rd 
+ON j.owner = rd.owner 
+AND j.job_name = rd.job_name
+WHERE j.job_name LIKE 'GATHER_%'
+ORDER BY j.owner, j.job_name, j.state;
 
 prompt
 prompt #######################################################################
 prompt # SCHEDULER JOB STATISTICS COLLECTION - STANDARD, STALE and FULL - DETAILS I
 prompt #######################################################################
+col job_name for a50
+col duration for a20
 SELECT owner
   , job_name
-  , to_char(log_date, 'YYYY-MM-DD HH24:MI:SS') as log_date
-  , to_char(actual_start_date, 'YYYY-MM-DD HH24:MI:SS') as actual_start_date 
+  , TO_CHAR(log_date, 'YYYY-MM-DD HH24:MI:SS') AS log_date
+  , TO_CHAR(actual_start_date, 'YYYY-MM-DD HH24:MI:SS') AS actual_start_date
+  , CASE WHEN actual_start_date IS NOT NULL AND log_date IS NOT NULL THEN TRIM(TO_CHAR(EXTRACT(HOUR FROM (log_date - actual_start_date)), 'FM00')) || ':' || TRIM(TO_CHAR(EXTRACT(MINUTE FROM (log_date - actual_start_date)), 'FM00')) || ' (HH:MM)' ELSE 'N/A' END AS duration
   , status
 FROM DBA_SCHEDULER_JOB_RUN_DETAILS 
-WHERE job_name like 'GATHER_%'
-order by 1,2,3;
+WHERE job_name LIKE 'GATHER_%'
+ORDER BY owner, job_name, log_date;
 
 prompt
 prompt #######################################################################
@@ -500,64 +551,3 @@ SELECT * FROM (SELECT JOB_NAME
 WHERE ROWNUM < '&ROWNUM'
 order by 1,2,3;
 
-
--- -------------------------------------------------------------------------------------------------------
--- EXEC DBMS_SCHEDULER.STOP_JOB (job_name => 'GATHER_STATS_FULL_CUSTOM_JOB');
--- /
--- EXEC DBMS_SCHEDULER.STOP_JOB (job_name => 'GATHER_DATABASE_STATS_JOB');
--- /
--- EXEC DBMS_SCHEDULER.STOP_JOB (job_name => 'GATHER_DICTIONARY_STATS_JOB');
--- /
--- EXEC DBMS_SCHEDULER.STOP_JOB (job_name => 'GATHER_FIXED_OBJECTS_STATS_JOB');
--- /
--- EXEC DBMS_SCHEDULER.STOP_JOB (job_name => 'GATHER_STATS_JOB');
--- /
--- EXEC DBMS_SCHEDULER.STOP_JOB (job_name => 'GATHER_STALE_CUSTOM_STATS_JOB');
--- /
--- EXEC DBMS_SCHEDULER.STOP_JOB (job_name => 'GATHER_FULL_CUSTOM_STATS_JOB');
--- /
--- -------------------------------------------------------------------------------------------------------
--- BEGIN DBMS_SCHEDULER.DROP_JOB (job_name => 'GATHER_STATS_FULL_CUSTOM_JOB', force => FALSE); END;
--- /
--- BEGIN DBMS_SCHEDULER.DROP_JOB (job_name => 'GATHER_DATABASE_STATS_JOB', force => FALSE); END;
--- /
--- BEGIN DBMS_SCHEDULER.DROP_JOB (job_name => 'GATHER_DICTIONARY_STATS_JOB', force => FALSE); END;
--- /
--- BEGIN DBMS_SCHEDULER.DROP_JOB (job_name => 'GATHER_FIXED_OBJECTS_STATS_JOB', force => FALSE); END;
--- /
--- BEGIN DBMS_SCHEDULER.DROP_JOB (job_name => 'GATHER_STATS_JOB', force => FALSE); END;
--- /
--- BEGIN DBMS_SCHEDULER.DROP_JOB (job_name => 'GATHER_STALE_CUSTOM_STATS_JOB', force => FALSE); END;
--- /
--- BEGIN DBMS_SCHEDULER.DROP_JOB (job_name => 'GATHER_FULL_CUSTOM_STATS_JOB', force => FALSE); END;
--- /
--- -------------------------------------------------------------------------------------------------------
--- BEGIN DBMS_SCHEDULER.DROP_PROGRAM (program_name => 'GATHER_SYSTEM_STATS_JOB', force => TRUE); END;
--- /
--- BEGIN DBMS_SCHEDULER.DROP_PROGRAM (program_name => 'GATHER_DATABASE_STATS_JOB', force => TRUE); END;
--- /
--- BEGIN DBMS_SCHEDULER.DROP_PROGRAM (program_name => 'GATHER_DICTIONARY_STATS_JOB', force => TRUE); END;
--- /
--- BEGIN DBMS_SCHEDULER.DROP_PROGRAM (program_name => 'GATHER_FIXED_OBJECTS_STATS_JOB', force => TRUE); END;
--- /
--- BEGIN DBMS_SCHEDULER.DROP_PROGRAM (program_name => 'GATHER_STATS_JOB', force => TRUE); END;
--- /
--- BEGIN DBMS_SCHEDULER.DROP_PROGRAM (program_name => 'GATHER_STALE_CUSTOM_STATS_JOB', force => TRUE); END;
--- /
--- BEGIN DBMS_SCHEDULER.DROP_PROGRAM (program_name => 'GATHER_FULL_CUSTOM_STATS_JOB', force => TRUE); END;
--- /
--- -------------------------------------------------------------------------------------------------------
--- EXEC DBMS_SCHEDULER.ENABLE ('GATHER_STATS_FULL_CUSTOM_JOB');
--- /
--- EXEC DBMS_SCHEDULER.ENABLE ('GATHER_DATABASE_STATS_JOB');
--- /
--- EXEC DBMS_SCHEDULER.ENABLE ('GATHER_DICTIONARY_STATS_JOB');
--- /
--- EXEC DBMS_SCHEDULER.ENABLE ('GATHER_FIXED_OBJECTS_STATS_JOB');
--- /
--- EXEC DBMS_SCHEDULER.ENABLE ('GATHER_STATS_JOB');
--- /
--- EXEC DBMS_SCHEDULER.ENABLE ('GATHER_STALE_CUSTOM_STATS_JOB');
--- /
--- EXEC DBMS_SCHEDULER.ENABLE ('GATHER_FULL_CUSTOM_STATS_JOB');
--- /
