@@ -1195,6 +1195,8 @@ alias s='rlwrap sqlplus / as sysdba @${DBNITRO}/sql/glogin.sql'
 alias adrci='rlwrap adrci'
 alias ad='rlwrap adrci'
 alias p='ps -ef | egrep -v "grep|egrep|ruby" | egrep "pmon|ohasd|d.bin" | sort'
+alias dus='du -sh *'
+alias lsb='lsblk -o NAME,FSTYPE,SIZE,MOUNTPOINT,UUID,TYPE,MAJ:MIN,WWN,HCTL'
 alias lsnrctl='rlwrap lsnrctl'
 alias t='rlwrap lsnrctl'
 alias l='lsnrctl status'
@@ -1297,6 +1299,8 @@ alias s='rlwrap sqlplus / as sysasm @${DBNITRO}/sql/glogin.sql'
 alias adrci='rlwrap adrci'
 alias ad='rlwrap adrci'
 alias p='ps -ef | egrep -v "grep|egrep|ruby" | egrep "pmon|ohasd|d.bin" | sort'
+alias dus='du -sh *'
+alias lsb='lsblk -o NAME,FSTYPE,SIZE,MOUNTPOINT,UUID,TYPE,MAJ:MIN,WWN,HCTL'
 alias lsnrctl='rlwrap lsnrctl'
 alias t='rlwrap lsnrctl'
 alias l='lsnrctl status'
@@ -1422,6 +1426,8 @@ alias d='rlwrap dgmgrl /'
 alias adrci='rlwrap adrci'
 alias ad='rlwrap adrci'
 alias p='ps -ef | egrep -v "grep|egrep|ruby" | egrep "pmon|ohasd|d.bin" | sort'
+alias dus='du -sh *'
+alias lsb='lsblk -o NAME,FSTYPE,SIZE,MOUNTPOINT,UUID,TYPE,MAJ:MIN,WWN,HCTL'
 alias lsnrctl='rlwrap lsnrctl'
 alias t='rlwrap lsnrctl'
 alias l='lsnrctl status'
@@ -1464,6 +1470,7 @@ if [[ "$(ps -ef | egrep -i "ora_pmon|db_pmon" | egrep -i "${ORACLE_SID}" | awk '
     printf "+%-30s+%-100s+\n" "------------------------------" "----------------------------------------------------------------------------------------------------"
     printf "|%-22s|%-100s|\n" "            [ DATABASE_NAME ] " " [ $(echo "select to_char(name) from v\$database;" | sqlplus -S / as sysdba | tail -2) ]"
     printf "|%-22s|%-100s|\n" "     [ DATABASE_UNIQUE_NAME ] " " [ $(echo "select to_char(db_unique_name) from v\$database;" | sqlplus -S / as sysdba | tail -2) ]"
+    printf "|%-22s|%-100s|\n" "               [ ORACLE_SID ] " " [ ${ORACLE_SID} ]"
     printf "|%-22s|%-100s|\n" "                     [ DBID ] " " [ $(echo "select to_char(dbid) from v\$database;" | sqlplus -S / as sysdba | tail -2) ]"
     printf "|%-22s|%-100s|\n" "          [ DATABASE_STATUS ] " " [ $(echo "select to_char(database_status) from v\$instance;" | sqlplus -S / as sysdba | tail -2) ]"
     printf "|%-22s|%-100s|\n" "            [ DATABASE_ROLE ] " " [ $(echo "select to_char(database_role) from v\$database;" | sqlplus -S / as sysdba | tail -2) ]"
@@ -1484,7 +1491,6 @@ if [[ "$(ps -ef | egrep -i "ora_pmon|db_pmon" | egrep -i "${ORACLE_SID}" | awk '
     printf "|%-22s|%-100s|\n" "           [ ORACLE_VERSION ] " " [ $(sqlplus -V | egrep -i "Version" | awk '{ print $2 }') ]"
     printf "|%-22s|%-100s|\n" "          [ HOME_READ/WRITE ] " " [ ${HOME_RW} ]"
     printf "|%-22s|%-100s|\n" "             [ ORACLE_OWNER ] " " [ ${OWNER} ]"
-    printf "|%-22s|%-100s|\n" "               [ ORACLE_SID ] " " [ ${ORACLE_SID} ]"
     printf "|%-22s|%-100s|\n" "          [ DATABASE_STATUS ] " " [ ${DB_STATUS} ]"
     ListenerService
     Show_PDBS
@@ -1497,6 +1503,7 @@ if [[ "$(ps -ef | egrep -i "ora_pmon|db_pmon" | egrep -i "${ORACLE_SID}" | awk '
     printf "+%-30s+%-100s+\n" "------------------------------" "----------------------------------------------------------------------------------------------------"
     printf "|%-22s|%-100s|\n" "            [ DATABASE_NAME ] " " [ $(echo "select to_char(name) from v\$database;" | sqlplus -S / as sysdba | tail -2) ]"
     printf "|%-22s|%-100s|\n" "     [ DATABASE_UNIQUE_NAME ] " " [ $(echo "select to_char(db_unique_name) from v\$database;" | sqlplus -S / as sysdba | tail -2) ]"
+    printf "|%-22s|%-100s|\n" "               [ ORACLE_SID ] " " [ ${ORACLE_SID} ]"
     printf "|%-22s|%-100s|\n" "                     [ DBID ] " " [ $(echo "select to_char(dbid) from v\$database;" | sqlplus -S / as sysdba | tail -2) ]"
     printf "|%-22s|%-100s|\n" "          [ DATABASE_STATUS ] " " [ $(echo "select to_char(database_status) from v\$instance;" | sqlplus -S / as sysdba | tail -2) ]"
     printf "|%-22s|%-100s|\n" "            [ DATABASE_ROLE ] " " [ $(echo "select to_char(database_role) from v\$database;" | sqlplus -S / as sysdba | tail -2) ]"
@@ -1517,7 +1524,6 @@ if [[ "$(ps -ef | egrep -i "ora_pmon|db_pmon" | egrep -i "${ORACLE_SID}" | awk '
     printf "|%-22s|%-100s|\n" "           [ ORACLE_VERSION ] " " [ $(sqlplus -V | egrep -i "Version" | awk '{ print $2 }') ]"
     printf "|%-22s|%-100s|\n" "          [ HOME_READ/WRITE ] " " [ ${HOME_RW} ]"
     printf "|%-22s|%-100s|\n" "             [ ORACLE_OWNER ] " " [ ${OWNER} ]"
-    printf "|%-22s|%-100s|\n" "               [ ORACLE_SID ] " " [ ${ORACLE_SID} ]"
     printf "|%-22s|%-100s|\n" "          [ DATABASE_STATUS ] " " [ ${DB_STATUS} ]"
     ListenerService
     Show_PDBS
@@ -1567,6 +1573,8 @@ alias opv='echo ORACLE_HOME:${ORACLE_HOME}; ${OPATCH}/opatch version'
 alias opi='echo ORACLE_HOME:${ORACLE_HOME}; ${OPATCH}/opatch lsinventory'
 alias opl='echo ORACLE_HOME:${ORACLE_HOME}; ${OPATCH}/opatch lspatches | sort'
 alias p='ps -ef | egrep -v "grep|egrep|ruby" | egrep "wlserver"'
+alias dus='du -sh *'
+alias lsb='lsblk -o NAME,FSTYPE,SIZE,MOUNTPOINT,UUID,TYPE,MAJ:MIN,WWN,HCTL'
 alias emlog='tail -f -n 100 ${OMS_GC}/em/EMGC_OMS1/sysman/log/emctl.log'
 alias emlogv='vi ${OMS_GC}/em/EMGC_OMS1/sysman/log/emctl.log'
 alias omslog='tail -f -n 100 ${OMS_GC}/em/EMGC_OMS1/sysman/log/emoms.log'
@@ -1603,6 +1611,12 @@ alias_var
 local OPT="$1"
 export ORACLE_HOSTNAME="${HOST}"
 export ORACLE_HOME="$(cat ${ORA_INVENTORY} | egrep -i "${OPT}" | awk '{ print $3 }' | cut -f2 -d '=' | cut -f2 -d '"')"
+export OGG_HOME="$1"
+
+export DEPLOYMENT_HOME=/u01/app/oracle/product/23.4.1.24/deploy
+export OGG_CONF_HOME=/u01/app/oracle/product/23.4.1.24/ogg_deploy/etc/conf
+export OGG_VAR_HOME=/u01/app/oracle/product/23.4.1.24/ogg_deploy/var
+
 export OH="${ORACLE_HOME}"
 export OPATCH="${ORACLE_HOME}/OPatch"
 export JAVA_HOME="${ORACLE_HOME}/jdk"
@@ -1611,6 +1625,7 @@ export LD_LIBRARY_PATH="/lib:/usr/lib:/usr/lib64:${ORACLE_HOME}/lib:${ORACLE_HOM
 export PATH="${PATH}:${ORACLE_HOME}/bin:${OPATCH}:${ORACLE_HOME}/perl/bin:${JAVA_HOME}/bin:${DBNITRO}/bin"
 export NLS_DATE_FORMAT='YYYY-MM-DD HH24:MI:SS'
 alias oh='cd ${ORACLE_HOME}'
+alias dep='cd ${}'
 alias hpg='grep HugePages_ /proc/meminfo'
 alias opv='echo ORACLE_HOME:${ORACLE_HOME}; ${OPATCH}/opatch version'
 alias opi='echo ORACLE_HOME:${ORACLE_HOME}; ${OPATCH}/opatch lsinventory'
@@ -1618,6 +1633,8 @@ alias opl='echo ORACLE_HOME:${ORACLE_HOME}; ${OPATCH}/opatch lspatches | sort'
 alias adrci='rlwrap adrci'
 alias ad='rlwrap adrci'
 alias p='ps -ef | egrep -v "grep|egrep|ruby" | egrep "ogg_"'
+alias dus='du -sh *'
+alias lsb='lsblk -o NAME,FSTYPE,SIZE,MOUNTPOINT,UUID,TYPE,MAJ:MIN,WWN,HCTL'
 alias list='${DBNITRO}/bin/OracleList.sh'
 #
 OWNER="$(ls -l ${ORACLE_HOME} | awk '{ print $3 }' | egrep -i -v "root" | egrep -Ev "^$" | uniq)"
@@ -1668,6 +1685,8 @@ alias startWLS='${WL_HOME}/user_projects/domains/base_domain/bin/startWebLogic.s
 alias stopWLS='${WL_HOME}/user_projects/domains/base_domain/bin/stopWebLogic.sh'
 alias wls='emctl status oms -details'
 alias p='ps -ef | egrep -v "grep|egrep|ruby" | egrep "wlserver"'
+alias dus='du -sh *'
+alias lsb='lsblk -o NAME,FSTYPE,SIZE,MOUNTPOINT,UUID,TYPE,MAJ:MIN,WWN,HCTL'
 alias list='${DBNITRO}/bin/OracleList.sh'
 ##### . "${WL_HOME}/../oracle_common/common/bin/commEnv.sh"
 #
@@ -1715,6 +1734,7 @@ alias opl='echo ORACLE_HOME:${ORACLE_HOME}; ${OPATCH}/opatch lspatches | sort'
 alias adrci='rlwrap adrci'
 alias ad='rlwrap adrci'
 alias p='ps -ef | egrep -v "grep|egrep|ruby" | egrep "agent"'
+alias dus='du -sh *'
 alias list='${DBNITRO}/bin/OracleList.sh'
 #
 OWNER="$(ls -l ${ORACLE_HOME} | awk '{ print $3 }' | egrep -i -v "root" | egrep -Ev "^$" | uniq)"
