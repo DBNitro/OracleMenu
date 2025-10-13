@@ -1,3 +1,13 @@
+A special thanks to:
+
+Fabio Specht
+Ricardo Portilho
+Fred Denis
+Rodrigo Mufalani
+Leonardo Lopes
+With your help, patient and some laughs, we did this easier!!!
+
+
 This Info here is to present you some advantages to use DBNITRO ORACLE MENU.
 
 This is a tool that give you DBA/DMA some good options to manage your environments, variables, databases, and others.
