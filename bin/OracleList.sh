@@ -1,8 +1,8 @@
 #!/bin/sh
 Author="Andre Augusto Ribas"
-SoftwareVersion="1.0.31"
+SoftwareVersion="1.0.33"
 DateCreation="18/09/2023"
-DateModification="04/06/2025"
+DateModification="13/10/2025"
 EMAIL="ribas@dbnitro.net"
 GITHUB="https://github.com/DBNitro"
 WEBSITE="http://dbnitro.net"
@@ -37,7 +37,7 @@ if [[ "$(uname)" == "SunOS" ]]; then
   MYSQL_PROC="$(ps -ef                  | egrep -i -v "grep|egrep|sed"                       | egrep -i "bin/mysqld"          | awk '{ print $NF }'          | sort               | wc -l             | uniq | xargs)"
   PSQL_PROC="$(ps -ef                   | egrep -i -v "grep|egrep|sed"                       | egrep -i "bin/postgres"        | awk '{ print $NF }'          | sort               | wc -l             | uniq | xargs)"
   DB2_PROC="$(ps -ef                    | egrep -i -v "grep|egrep|sed"                       | egrep -i "ibm/db2"             | awk '{ print $NF }'          | sort               | wc -l             | uniq | xargs)"
-  ASM_HOME="$(cat ${ORA_INVENTORY}      | egrep -i -v "${ORA_HOMES_IGNORE_1}"                | egrep -i "LOC"                 | egrep -i "OraGI"             | awk '{ print $3 }' | cut -f2 -d '='    | cut -f2 -d '"' | uniq | sort)"
+  ASM_HOME="$(cat ${ORA_INVENTORY}      | egrep -i -v "${ORA_HOMES_IGNORE_1}"                | egrep -i "LOC"                 | egrep -i "OraGI|CRS="        | awk '{ print $3 }' | cut -f2 -d '='    | cut -f2 -d '"' | uniq | sort)"
   DATABASE_HOME="$(cat ${ORA_INVENTORY} | egrep -i -v "${ORA_HOMES_IGNORE_1}"                | egrep -i "LOC"                 | egrep -i "OraDB|OraHome"     | awk '{ print $3 }' | cut -f2 -d '='    | cut -f2 -d '"' | uniq | sort)"
   CLIENT_HOME="$(cat ${ORA_INVENTORY}   | egrep -i -v "${ORA_HOMES_IGNORE_0}"                | egrep -i "LOC"                 | egrep -i "OraClient"         | awk '{ print $3 }' | cut -f2 -d '='    | cut -f2 -d '"' | uniq | sort)"
   AGENT_HOME="$(cat ${ORA_INVENTORY}    | egrep -i -v "${ORA_HOMES_IGNORE_0}"                | egrep -i "LOC"                 | egrep -i "agent"             | awk '{ print $3 }' | cut -f2 -d '='    | cut -f2 -d '"' | uniq | sort)"
@@ -65,7 +65,7 @@ elif [[ "$(uname)" == "AIX" ]]; then
   MYSQL_PROC="$(ps -ef                  | egrep -i -v "grep|egrep|sed"                       | egrep -i "bin/mysqld"          | awk '{ print $NF }'          | sort               | wc -l             | uniq | xargs)"
   PSQL_PROC="$(ps -ef                   | egrep -i -v "grep|egrep|sed"                       | egrep -i "bin/postgres"        | awk '{ print $NF }'          | sort               | wc -l             | uniq | xargs)"
   DB2_PROC="$(ps -ef                    | egrep -i -v "grep|egrep|sed"                       | egrep -i "ibm/db2"             | awk '{ print $NF }'          | sort               | wc -l             | uniq | xargs)"
-  ASM_HOME="$(cat ${ORA_INVENTORY}      | egrep -i -v "${ORA_HOMES_IGNORE_1}"                | egrep -i "LOC"                 | egrep -i "OraGI"             | awk '{ print $3 }' | cut -f2 -d '='    | cut -f2 -d '"' | uniq | sort)"
+  ASM_HOME="$(cat ${ORA_INVENTORY}      | egrep -i -v "${ORA_HOMES_IGNORE_1}"                | egrep -i "LOC"                 | egrep -i "OraGI|CRS="        | awk '{ print $3 }' | cut -f2 -d '='    | cut -f2 -d '"' | uniq | sort)"
   DATABASE_HOME="$(cat ${ORA_INVENTORY} | egrep -i -v "${ORA_HOMES_IGNORE_1}"                | egrep -i "LOC"                 | egrep -i "OraDB|OraHome"     | awk '{ print $3 }' | cut -f2 -d '='    | cut -f2 -d '"' | uniq | sort)"
   CLIENT_HOME="$(cat ${ORA_INVENTORY}   | egrep -i -v "${ORA_HOMES_IGNORE_0}"                | egrep -i "LOC"                 | egrep -i "OraClient"         | awk '{ print $3 }' | cut -f2 -d '='    | cut -f2 -d '"' | uniq | sort)"
   AGENT_HOME="$(cat ${ORA_INVENTORY}    | egrep -i -v "${ORA_HOMES_IGNORE_0}"                | egrep -i "LOC"                 | egrep -i "agent"             | awk '{ print $3 }' | cut -f2 -d '='    | cut -f2 -d '"' | uniq | sort)"
@@ -93,7 +93,7 @@ elif [[ "$(uname)" == "Linux" ]]; then
   MYSQL_PROC="$(ps -ef                  | egrep -i -v "grep|egrep|sed"                       | egrep -i "bin/mysqld"          | awk '{ print $NF }'          | sort               | wc -l             | uniq | xargs)"
   PSQL_PROC="$(ps -ef                   | egrep -i -v "grep|egrep|sed"                       | egrep -i "bin/postgres"        | awk '{ print $NF }'          | sort               | wc -l             | uniq | xargs)"
   DB2_PROC="$(ps -ef                    | egrep -i -v "grep|egrep|sed"                       | egrep -i "ibm/db2"             | awk '{ print $NF }'          | sort               | wc -l             | uniq | xargs)"
-  ASM_HOME="$(cat ${ORA_INVENTORY}      | egrep -i -v "${ORA_HOMES_IGNORE_1}"                | egrep -i "LOC"                 | egrep -i "OraGI"             | awk '{ print $3 }' | cut -f2 -d '='    | cut -f2 -d '"' | uniq | sort)"
+  ASM_HOME="$(cat ${ORA_INVENTORY}      | egrep -i -v "${ORA_HOMES_IGNORE_1}"                | egrep -i "LOC"                 | egrep -i "OraGI|CRS="        | awk '{ print $3 }' | cut -f2 -d '='    | cut -f2 -d '"' | uniq | sort)"
   DATABASE_HOME="$(cat ${ORA_INVENTORY} | egrep -i -v "${ORA_HOMES_IGNORE_1}"                | egrep -i "LOC"                 | egrep -i "OraDB|OraHome"     | awk '{ print $3 }' | cut -f2 -d '='    | cut -f2 -d '"' | uniq | sort)"
   CLIENT_HOME="$(cat ${ORA_INVENTORY}   | egrep -i -v "${ORA_HOMES_IGNORE_0}"                | egrep -i "LOC"                 | egrep -i "OraClient"         | awk '{ print $3 }' | cut -f2 -d '='    | cut -f2 -d '"' | uniq | sort)"
   AGENT_HOME="$(cat ${ORA_INVENTORY}    | egrep -i -v "${ORA_HOMES_IGNORE_0}"                | egrep -i "LOC"                 | egrep -i "agent"             | awk '{ print $3 }' | cut -f2 -d '='    | cut -f2 -d '"' | uniq | sort)"
@@ -204,7 +204,7 @@ if [[ "${LISTENER_PROC}" != "0" ]]; then
            if [[ "${USING_GRID}" == "0" ]]; then
               LISTENER_PORT="$(${LISTENER_HOME}/bin/lsnrctl status ${LISTENER_SERVICE} | egrep -i "PORT=" | sed -n 's/.*(PORT=\([0-9]*\)).*/\1/p' | uniq)"
             else
-              LISTENER_PORT="$(srvctl config listener -listener ${LISTENER_SERVICE} | egrep "End points:" | awk '{ print $3 }')"
+              LISTENER_PORT="$(${LISTENER_HOME}/bin/srvctl config listener -listener ${LISTENER_SERVICE} | egrep "End points:" | awk '{ print $3 }')"
             fi
     printf "|%-31s|%-31s|%-31s|%-60s|\n" " ${LISTENER_SERVICE} [${LISTENER_PORT}]" " RUNNING " " UP SINCE: ${LISTENER_STARTED} " " ${LISTENER_HOME}"
     printf "+%-31s+%-31s+%-31s+%-50s+\n" "-------------------------------" "-------------------------------" "-------------------------------" "------------------------------------------------------------"
@@ -276,9 +276,9 @@ fi
 if [[ "$(whoami)" == "oracle" ]] || [[ "$(whoami)" == "grid" ]] ; then
   if [[ "${DATABASE_PROC}" != "0" ]]; then
     for DATABASE_SERVICE in $(ps -ef | egrep -i -v "grep|egrep|sed" | egrep -i "ora_pmon|db_pmon" | awk '{ print $NF }' | sed s/ora_pmon_//g | sed s/db_pmon_//g | uniq | sort); do
-      if [[ $(cat ${ORATAB} | awk '{ print $1 }' | cut -f1 -d ':' | egrep -w "${DATABASE_SERVICE}") != ${DATABASE_SERVICE} ]]; then
+      if [[ $(cat ${ORATAB} | egrep -v "^#|^$" | awk '{ print $1 }' | cut -f1 -d ':' | egrep -w "${DATABASE_SERVICE}") != ${DATABASE_SERVICE} ]]; then
         DATABASE_STARTED="$(ps -ef | egrep -i "ora_pmon|db_pmon" | egrep -i "${DATABASE_SERVICE}" | awk '{ print $5 }' | uniq | tail -2)"
-           DATABASE_TYPE="$(ps -ef | egrep -i "ora_mrp"  | egrep -i "${DATABASE_SERVICE}" | sort | wc -l | xargs | uniq)"
+           DATABASE_TYPE="$(ps -ef | egrep -i "ora_mrp" | egrep -i "${DATABASE_SERVICE}" | sort | wc -l | xargs | uniq)"
         printf "|%-31s|%-31s|%-31s|%-60s|\n" " ${DATABASE_SERVICE} " " RUNNING " " UP SINCE: ${DATABASE_STARTED} " " ${DATABASE_TYPE}"
         printf "+%-31s+%-31s+%-31s+%-50s+\n" "-------------------------------" "-------------------------------" "-------------------------------" "------------------------------------------------------------"
       else
@@ -314,11 +314,11 @@ else
     for DATABASE_SERVICE in $(ps -ef | egrep -i -v "grep|egrep|sed" | egrep -i "ora_pmon|db_pmon" | awk '{ print $NF }' | sed s/ora_pmon_//g | sed s/db_pmon_//g | uniq | sort); do
       DATABASE_STARTED="$(ps -ef | egrep -i "ora_pmon|db_pmon" | egrep -i "${DATABASE_SERVICE}" | awk '{ print $5 }' | uniq | tail -2)"
          DATABASE_TYPE="$(ps -ef | egrep -i "ora_mrp" | egrep -i "${DATABASE_SERVICE}" | sort | wc -l | xargs | uniq)"
-      if [[ "$(cat ${ORATAB} | awk '{ print $1 }' | cut -f1 -d ':' | egrep -w "${DATABASE_SERVICE}" | wc -l | xargs | uniq)" == "0" ]]; then
+      if [[ "$(cat ${ORATAB} | egrep -v "^#|^$" | awk '{ print $1 }' | cut -f1 -d ':' | egrep -w "${DATABASE_SERVICE}" | wc -l | xargs | uniq)" == "0" ]]; then
         printf "|%-31s|%-31s|%-31s|%-60s|\n" " ${DATABASE_SERVICE} " " RUNNING " " UP SINCE: ${DATABASE_STARTED} " " $(if [[ "${DATABASE_TYPE}" == "0" ]]; then echo "[ PRIMARY ]"; else echo "[ STANDBY ]"; fi) "
         printf "+%-31s+%-31s+%-31s+%-50s+\n" "-------------------------------" "-------------------------------" "-------------------------------" "------------------------------------------------------------"
       else
-        DATABASE_HOMES="$(cat ${ORATAB} | egrep -w "${DATABASE_SERVICE}" | cut -f2 -d ':')"
+        DATABASE_HOMES="$(cat ${ORATAB} | egrep -v "^#|^$" | egrep -w "${DATABASE_SERVICE}" | cut -f2 -d ':')"
         printf "|%-31s|%-31s|%-31s|%-60s|\n" " ${DATABASE_SERVICE} " " RUNNING " " UP SINCE: ${DATABASE_STARTED} " " ${DATABASE_HOMES} $(if [[ "${DATABASE_TYPE}" == "0" ]]; then echo "[ PRIMARY ]"; else echo "[ STANDBY ]"; fi) "
         printf "+%-31s+%-31s+%-31s+%-50s+\n" "-------------------------------" "-------------------------------" "-------------------------------" "------------------------------------------------------------"
       fi
