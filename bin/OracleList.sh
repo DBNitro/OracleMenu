@@ -276,10 +276,11 @@ fi
 if [[ "$(whoami)" == "oracle" ]] || [[ "$(whoami)" == "grid" ]] ; then
   if [[ "${DATABASE_PROC}" != "0" ]]; then
     for DATABASE_SERVICE in $(ps -ef | egrep -i -v "grep|egrep|sed" | egrep -i "ora_pmon|db_pmon" | awk '{ print $NF }' | sed s/ora_pmon_//g | sed s/db_pmon_//g | uniq | sort); do
-      if [[ $(cat ${ORATAB} | egrep -v "^#|^$" | awk '{ print $1 }' | cut -f1 -d ':' | egrep -w "${DATABASE_SERVICE}") != ${DATABASE_SERVICE} ]]; then
+      if [[ $(cat ${ORATAB} | egrep -v "^#|^$" | awk '{ print $1 }' | cut -f1 -d ':' | sed 's/_.*//' | egrep -w "${DATABASE_SERVICE}") != ${DATABASE_SERVICE} ]]; then
         DATABASE_STARTED="$(ps -ef | egrep -i "ora_pmon|db_pmon" | egrep -i "${DATABASE_SERVICE}" | awk '{ print $5 }' | uniq | tail -2)"
            DATABASE_TYPE="$(ps -ef | egrep -i "ora_mrp" | egrep -i "${DATABASE_SERVICE}" | sort | wc -l | xargs | uniq)"
-        printf "|%-31s|%-31s|%-31s|%-60s|\n" " ${DATABASE_SERVICE} " " RUNNING " " UP SINCE: ${DATABASE_STARTED} " " ${DATABASE_TYPE}"
+           DATABASE_ROLE="$(if [[ "${DATABASE_TYPE}" == "0" ]]; then echo "[ PRIMARY ]"; else echo "[ STANDBY ]"; fi)"
+        printf "|%-31s|%-31s|%-31s|%-60s|\n" " ${DATABASE_SERVICE} " " RUNNING " " UP SINCE: ${DATABASE_STARTED} " " ${DATABASE_TYPE} ${DATABASE_ROLE}"
         printf "+%-31s+%-31s+%-31s+%-50s+\n" "-------------------------------" "-------------------------------" "-------------------------------" "------------------------------------------------------------"
       else
       ORAENV_ASK=NO
@@ -314,12 +315,13 @@ else
     for DATABASE_SERVICE in $(ps -ef | egrep -i -v "grep|egrep|sed" | egrep -i "ora_pmon|db_pmon" | awk '{ print $NF }' | sed s/ora_pmon_//g | sed s/db_pmon_//g | uniq | sort); do
       DATABASE_STARTED="$(ps -ef | egrep -i "ora_pmon|db_pmon" | egrep -i "${DATABASE_SERVICE}" | awk '{ print $5 }' | uniq | tail -2)"
          DATABASE_TYPE="$(ps -ef | egrep -i "ora_mrp" | egrep -i "${DATABASE_SERVICE}" | sort | wc -l | xargs | uniq)"
-      if [[ "$(cat ${ORATAB} | egrep -v "^#|^$" | awk '{ print $1 }' | cut -f1 -d ':' | egrep -w "${DATABASE_SERVICE}" | wc -l | xargs | uniq)" == "0" ]]; then
-        printf "|%-31s|%-31s|%-31s|%-60s|\n" " ${DATABASE_SERVICE} " " RUNNING " " UP SINCE: ${DATABASE_STARTED} " " $(if [[ "${DATABASE_TYPE}" == "0" ]]; then echo "[ PRIMARY ]"; else echo "[ STANDBY ]"; fi) "
+         DATABASE_ROLE="$(if [[ "${DATABASE_TYPE}" == "0" ]]; then echo "[ PRIMARY ]"; else echo "[ STANDBY ]"; fi)"
+      if [[ "$(cat ${ORATAB} | egrep -v "^#|^$" | awk '{ print $1 }' | cut -f1 -d ':' | sed 's/_.*//' | egrep -w "${DATABASE_SERVICE}" | wc -l | xargs | uniq)" == "0" ]]; then
+        printf "|%-31s|%-31s|%-31s|%-60s|\n" " ${DATABASE_SERVICE} " " RUNNING " " UP SINCE: ${DATABASE_STARTED} " " ${DATABASE_ROLE} "
         printf "+%-31s+%-31s+%-31s+%-50s+\n" "-------------------------------" "-------------------------------" "-------------------------------" "------------------------------------------------------------"
       else
-        DATABASE_HOMES="$(cat ${ORATAB} | egrep -v "^#|^$" | egrep -w "${DATABASE_SERVICE}" | cut -f2 -d ':')"
-        printf "|%-31s|%-31s|%-31s|%-60s|\n" " ${DATABASE_SERVICE} " " RUNNING " " UP SINCE: ${DATABASE_STARTED} " " ${DATABASE_HOMES} $(if [[ "${DATABASE_TYPE}" == "0" ]]; then echo "[ PRIMARY ]"; else echo "[ STANDBY ]"; fi) "
+        DATABASE_HOMES="$(cat ${ORATAB} | egrep -v "^#|^$" | sed 's/_.*//' | egrep -w "${DATABASE_SERVICE}" | cut -f2 -d ':' | uniq)"
+        printf "|%-31s|%-31s|%-31s|%-60s|\n" " ${DATABASE_SERVICE} " " RUNNING " " UP SINCE: ${DATABASE_STARTED} " " ${DATABASE_HOMES} ${DATABASE_ROLE} "
         printf "+%-31s+%-31s+%-31s+%-50s+\n" "-------------------------------" "-------------------------------" "-------------------------------" "------------------------------------------------------------"
       fi
     done
