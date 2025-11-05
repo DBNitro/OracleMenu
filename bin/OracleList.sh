@@ -317,7 +317,7 @@ else
       DATABASE_STARTED="$(ps -ef | egrep -i "ora_pmon|db_pmon" | egrep -i "${DATABASE_SERVICE}" | awk '{ print $5 }' | uniq | tail -2)"
          DATABASE_TYPE="$(ps -ef | egrep -i "ora_mrp" | egrep -i "${DATABASE_SERVICE}" | sort | wc -l | xargs | uniq)"
          DATABASE_ROLE="$(if [[ "${DATABASE_TYPE}" == "0" ]]; then echo "[ PRIMARY ]"; else echo "[ STANDBY ]"; fi)"
-        DATABASE_HOMES="$(strings /proc/$(ps -ef | egrep -i -v "grep|egrep|sed" | egrep -i "ora_pmon|db_pmon" | awk '{ print $2 }')/environ | egrep "ORACLE_HOME" | cut -f2 -d '=')"
+        DATABASE_HOMES="$(strings /proc/$(ps -ef | egrep -i -v "grep|egrep|sed" | egrep -i "ora_pmon|db_pmon" | egrep -i "${DATABASE_SERVICE}" | awk '{ print $2 }')/environ | egrep "ORACLE_HOME" | cut -f2 -d '=')"
       if [[ "$(cat ${ORATAB} | egrep -v "^#|^$" | awk '{ print $1 }' | cut -f1 -d ':' | sed 's/_.*//' | egrep -w "${DATABASE_SERVICE}" | wc -l | xargs | uniq)" == "0" ]]; then
         printf "|%-31s|%-31s|%-31s|%-60s|\n" " ${DATABASE_SERVICE} ${DATABASE_ROLE} " " RUNNING " " UP SINCE: ${DATABASE_STARTED} " " ${DATABASE_HOMES} "
         printf "+%-31s+%-31s+%-31s+%-50s+\n" "-------------------------------" "-------------------------------" "-------------------------------" "------------------------------------------------------------"
