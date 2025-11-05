@@ -1,8 +1,8 @@
 #!/bin/sh
 Author="Andre Augusto Ribas"
-SoftwareVersion="1.0.33"
+SoftwareVersion="1.0.35"
 DateCreation="18/09/2023"
-DateModification="13/10/2025"
+DateModification="05/11/2025"
 EMAIL="ribas@dbnitro.net"
 GITHUB="https://github.com/DBNitro"
 WEBSITE="http://dbnitro.net"
@@ -163,7 +163,8 @@ printf "+%-31s+%-25s+%-25s+%-50s+\n" "-------------------------------" "--------
 if [[ "${ASM_PROC}" != "0" ]]; then
   ASM_SERVICE="$(ps -ef | egrep -i -v "grep|egrep|sed" | egrep -i "asm_pmon" | awk '{ print $NF }' | sed s/asm_pmon_//g | uniq | sort)"
   ASM_STARTED="$(ps -ef | egrep -i -v "grep|egrep|sed" | egrep -i "asm_pmon" | awk '{ print $5 }'  | uniq               | tail -2)"
-  printf "|%-31s|%-31s|%-31s|%-60s|\n" " ${ASM_SERVICE} " " RUNNING " " UP SINCE: ${ASM_STARTED} " " ${ASM_HOME}"
+    ASM_HOMES="$(ps -ef | egrep -i -v "grep|egrep|sed" | egrep -i "oraagent.bin" | awk '{ print $8 }' | sed 's#/bin/oraagent\.bin##')"
+  printf "|%-31s|%-31s|%-31s|%-60s|\n" " ${ASM_SERVICE} " " RUNNING " " UP SINCE: ${ASM_STARTED} " " ${ASM_HOMES}"
   printf "+%-31s+%-31s+%-31s+%-50s+\n" "-------------------------------" "-------------------------------" "-------------------------------" "------------------------------------------------------------"
 fi
 #
@@ -283,12 +284,12 @@ if [[ "$(whoami)" == "oracle" ]] || [[ "$(whoami)" == "grid" ]] ; then
         printf "|%-31s|%-31s|%-31s|%-60s|\n" " ${DATABASE_SERVICE} " " RUNNING " " UP SINCE: ${DATABASE_STARTED} " " ${DATABASE_TYPE} ${DATABASE_ROLE}"
         printf "+%-31s+%-31s+%-31s+%-50s+\n" "-------------------------------" "-------------------------------" "-------------------------------" "------------------------------------------------------------"
       else
-      ORAENV_ASK=NO
-      ORACLE_SID=${DATABASE_SERVICE}
-      . /usr/local/bin/oraenv <<< ${ORACLE_SID} > /dev/null
-      #
-      # DATABASE STATUS
-      #
+ORAENV_ASK=NO
+ORACLE_SID=${DATABASE_SERVICE}
+. /usr/local/bin/oraenv <<< ${ORACLE_SID} > /dev/null
+#
+# DATABASE STATUS
+#
 DATABASE_STATUS="$(echo "select status || ' ' || (select case when value = 'TRUE' then '[ RAC ]' else '[ SING ]' end from v\$parameter where name = 'cluster_database') as status from v\$instance;" | sqlplus -S / as sysdba | tail -2)"
 #
 # DATABASE ROLE
