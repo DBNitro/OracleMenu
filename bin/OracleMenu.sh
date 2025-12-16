@@ -1,8 +1,8 @@
 #!/bin/sh
 Author="Andre Augusto Ribas"
-SoftwareVersion="1.0.145"
+SoftwareVersion="1.0.147"
 DateCreation="07/01/2021"
-DateModification="05/09/2025"
+DateModification="05/11/2025"
 EMAIL="ribas@dbnitro.net"
 GITHUB="https://github.com/DBNitro"
 WEBSITE="http://dbnitro.net"
@@ -1026,12 +1026,13 @@ elif [[ "${CONTAINER}" == "NO" ]]; then
 elif [[ "${PLUGGABLES}" == "0" ]]; then
   echo " -- YOUR ENVIRONMENT DOES NOT HAVE PLUGGABLE DATABASES YET --"
   return 0
-else
-sqlplus -S '/ as sysdba' > ${DBNITRO}/var/Pluggable_${ORACLE_SID}.var <<EOF | tail -2
+else 
+sqlplus -S / as sysdba > ${DBNITRO}/var/Pluggable_${ORACLE_SID}.var <<EOF | tail -2
 set define off trims on newp none heads off echo off feed off numwidth 20 pagesize 0 null null verify off wrap off timing off serveroutput off termout off heading off
 select name as PDBS from v\$containers where con_id not in (0,1,2) order by 1;
 quit;
 EOF
+### echo "select name as PDBS from v\$containers where con_id not in (0,1,2) order by 1;" | sqlplus -S / as sysdba | tail -2
 fi
 #
 # ------------------------------------------------------------------------
@@ -1118,10 +1119,10 @@ define gname=idle
 set heading off termout off
 column global_name new_value gname
 col global_name noprint
+-- select 'Welcome, you are connected to ' || name || ' database' as Message from v\$database;
 -- select upper(sys_context('userenv', 'con_name') || '@' || sys_context('userenv', 'db_name')) global_name from dual;
 -- select upper(sys_context('userenv', 'db_name') || '@' || sys_context('userenv', 'db_name')) global_name from dual;
 select upper(sys_context('userenv', 'session_user') || '@' || sys_context('userenv', 'con_name') || '@' || sys_context('userenv', 'cdb_name')) global_name from dual;
--- select 'Welcome, you are connected to ' || name || ' database' as Message from v\$database;
 SET SQLPROMPT '&gname> '
 EOF
 }
