@@ -10,7 +10,7 @@ Rodrigo Mufalani
 
 Leonardo Lopes
 
-Franky Weber
+Franky Weber Faust
 
 With your help, patient and some laughs, we did this easier!!!
 
